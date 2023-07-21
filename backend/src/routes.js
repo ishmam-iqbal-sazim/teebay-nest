@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
 router.get("/products", getProducts);
 
 // Add Product
-router.post("/products", addProduct);
+router.post("/product", addProduct);
 
 // Edit Product
 router.patch("/products/:productId", async (req, res) => {
