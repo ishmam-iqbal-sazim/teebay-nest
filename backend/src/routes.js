@@ -1,6 +1,10 @@
 import Router from "express";
 import { PrismaClient } from "@prisma/client";
-import { addProduct, getProducts } from "./products/controller.js";
+import {
+  addProduct,
+  deleteProduct,
+  getMyProducts,
+} from "./products/controller.js";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -62,13 +66,17 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Get all products of user
-router.get("/products", getProducts);
+// Get current user products
+router.get("/products", getMyProducts);
 
 // Add Product
 router.post("/product", addProduct);
 
-router.post("/product", editProduct);
+// Delete Product
+router.delete("/product/:productId", deleteProduct);
+
+// Edit Product
+// router.patch("/product", editProduct);
 
 // Edit Product
 router.patch("/products/:productId", async (req, res) => {
@@ -112,11 +120,6 @@ router.patch("/products/:productId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error updating product" });
   }
-});
-
-// Delete Product
-router.delete("/products/:productId", async (req, res) => {
-  // Handle deleting a product here
 });
 
 export default router;

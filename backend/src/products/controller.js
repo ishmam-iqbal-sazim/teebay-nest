@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const getProducts = async (req, res) => {
+const getMyProducts = async (req, res) => {
   const userId = 1; // replace later with original userId
 
   try {
@@ -72,4 +72,30 @@ const addProduct = async (req, res) => {
   res.json(product);
 };
 
-export { getProducts, addProduct };
+const deleteProduct = async (req, res) => {
+  const userId = 1; // replace later with original userId
+
+  try {
+    const { productId } = req.params;
+    console.log(productId);
+
+    // Find the product by ID
+    const product = await prisma.product.findUnique({
+      where: { id: Number(productId) },
+    });
+
+    // If the product does not exist or if the owner ID doesn't match the user ID
+    if (!product || product.ownerId !== userId) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Delete the product
+    await prisma.product.delete({ where: { id: Number(productId) } });
+
+    res.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting product" });
+  }
+};
+
+export { getMyProducts, addProduct, deleteProduct };

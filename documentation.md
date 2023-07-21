@@ -14,4 +14,6 @@ This was very challenging for me as the syntax of express and prisma was not ver
 Mantine initially felt a bit slow due to syntax unfamiliarity but it feels easy to work with.
 Experience some weird errors with cors which was resolved by enabling the CORS policy in my express server.
 
-## Start Part 2
+## Starting Part 2
+
+Faced a lot of trouble with the getMyProducts and addProduct api methods due to unfamiliarity with the syntax. Struggled a lot while using postman and scratching my head as to why the post method wasn't working. Turns out I was sending the request in raw text format and not json. :)
