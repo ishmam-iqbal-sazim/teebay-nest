@@ -12,11 +12,15 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@mantine/core": "^6.0.17",
+    "@mantine/form": "^6.0.17",
     "@mantine/hooks": "^6.0.17",
     "@prisma/client": "^5.0.0",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
