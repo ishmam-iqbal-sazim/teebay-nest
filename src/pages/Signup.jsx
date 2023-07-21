@@ -26,6 +26,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    console.log(form.values);
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/register",
