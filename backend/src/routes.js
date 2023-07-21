@@ -68,6 +68,8 @@ router.get("/products", getProducts);
 // Add Product
 router.post("/product", addProduct);
 
+router.post("/product", editProduct);
+
 // Edit Product
 router.patch("/products/:productId", async (req, res) => {
   const { productId } = req.params;

@@ -43,8 +43,6 @@ const addProduct = async (req, res) => {
     categories,
   } = req.body;
 
-  console.log(categories);
-
   // Does user exist?
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
