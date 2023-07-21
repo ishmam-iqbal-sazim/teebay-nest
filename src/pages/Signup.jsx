@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const form = useForm({
@@ -23,15 +23,18 @@ const Signup = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
-    console.log(form.values);
     try {
       const response = await axios.post(
         "http://localhost:3001/api/register",
         form.values
       );
-
       console.log("User registered:", response.data);
+      if (response.data.id) {
+        navigate("/my-products");
+      }
     } catch (error) {
       console.error("Error registering user:", error.message);
     }

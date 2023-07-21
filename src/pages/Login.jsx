@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const form = useForm({
@@ -19,6 +19,8 @@ const Login = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
     console.log(form.values);
     try {
@@ -27,6 +29,9 @@ const Login = () => {
         form.values
       );
       console.log("User logged in:", response.data);
+      if (response.data.id) {
+        navigate("/my-products");
+      }
     } catch (error) {
       console.error("Error logging in:", error.message);
     }

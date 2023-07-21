@@ -1,5 +1,4 @@
 import express from "express";
-
 import { PrismaClient } from "@prisma/client";
 
 const router = express.Router();
@@ -60,6 +59,67 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error logging in" });
   }
+});
+
+// Create a new product
+router.post("/products", async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      purchase_price,
+      rent_price,
+      rent_duration,
+      categories,
+    } = req.body;
+
+    const userId = 1; // Replace this with the actual user ID
+
+    // Does user exist?
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: "How did you get here, user? GO SIGNUP!" });
+    }
+
+    // Create new product and associate it with user
+    const product = await prisma.product.create({
+      data: {
+        title,
+        description,
+        purchase_price,
+        rent_price,
+        rent_duration,
+        owner: {
+          connect: { id: userId },
+        },
+        categories: {
+          connect: categories.map((categoryId) => ({ id: categoryId })),
+        },
+      },
+    });
+
+    // New product
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ error: "Error creating product" });
+  }
+});
+
+// Update a product by ID
+router.patch("/products/:productId", async (req, res) => {
+  // Handle updating a product here
+});
+
+// Delete a product by ID
+router.delete("/products/:productId", async (req, res) => {
+  // Handle deleting a product here
+});
+
+// Get all products
+router.get("/products", async (req, res) => {
+  res.json({ message: "hello I am all products" });
 });
 
 export default router;
