@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   addProduct,
   deleteProduct,
+  editProduct,
   getMyProducts,
 } from "./products/controller.js";
 
@@ -76,50 +77,6 @@ router.post("/product", addProduct);
 router.delete("/product/:productId", deleteProduct);
 
 // Edit Product
-// router.patch("/product", editProduct);
-
-// Edit Product
-router.patch("/products/:productId", async (req, res) => {
-  const { productId } = req.params;
-  const {
-    title,
-    description,
-    purchase_price,
-    rent_price,
-    rent_duration,
-    categories,
-  } = req.body;
-
-  try {
-    // Does product exist?
-    const product = await prisma.product.findUnique({
-      where: { id: Number(productId) },
-    });
-
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
-    // Update the product
-    const updatedProduct = await prisma.product.update({
-      where: { id: Number(productId) },
-      data: {
-        title,
-        description,
-        purchase_price,
-        rent_price,
-        rent_duration,
-        categories: {
-          set: categories.map((categoryId) => ({ id: Number(categoryId) })),
-        },
-      },
-    });
-
-    // Respond with the updated product
-    res.json(updatedProduct);
-  } catch (error) {
-    res.status(500).json({ error: "Error updating product" });
-  }
-});
+router.patch("/product/:productId", editProduct);
 
 export default router;

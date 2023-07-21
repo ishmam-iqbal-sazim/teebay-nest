@@ -6,7 +6,10 @@ const getMyProducts = async (req, res) => {
   const userId = 1; // replace later with original userId
 
   try {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { categories: true },
+    });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -44,7 +47,10 @@ const addProduct = async (req, res) => {
   } = req.body;
 
   // Does user exist?
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { categories: true },
+  });
   if (!user) {
     return res
       .status(404)
@@ -77,19 +83,18 @@ const deleteProduct = async (req, res) => {
 
   try {
     const { productId } = req.params;
-    console.log(productId);
 
-    // Find the product by ID
+    // Find product by ID
     const product = await prisma.product.findUnique({
       where: { id: Number(productId) },
+      include: { categories: true },
     });
 
-    // If the product does not exist or if the owner ID doesn't match the user ID
     if (!product || product.ownerId !== userId) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // Delete the product
+    // Delete product
     await prisma.product.delete({ where: { id: Number(productId) } });
 
     res.json({ message: "Product deleted successfully" });
@@ -98,4 +103,49 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-export { getMyProducts, addProduct, deleteProduct };
+const editProduct = async (req, res) => {
+  const userId = 1; // replace later with original userId
+
+  try {
+    const { productId } = req.params;
+    const {
+      title,
+      description,
+      purchase_price,
+      rent_price,
+      rent_duration,
+      categories,
+    } = req.body;
+
+    // Find product by ID
+    const product = await prisma.product.findUnique({
+      where: { id: Number(productId) },
+      include: { categories: true },
+    });
+
+    if (!product || product.ownerId !== userId) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id: Number(productId) },
+      data: {
+        title,
+        description,
+        purchase_price,
+        rent_price,
+        rent_duration,
+        categories: {
+          set: categories.map((categoryId) => ({ id: Number(categoryId) })),
+        },
+      },
+      include: { categories: true },
+    });
+
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ error: "Error updating product" });
+  }
+};
+
+export { getMyProducts, addProduct, deleteProduct, editProduct };
