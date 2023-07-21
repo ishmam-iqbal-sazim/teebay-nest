@@ -25,7 +25,7 @@ const Login = () => {
     console.log(form.values);
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/login",
+        "http://localhost:3001/api/v1/login",
         form.values
       );
       console.log("User logged in:", response.data);

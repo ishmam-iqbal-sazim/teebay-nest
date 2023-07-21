@@ -1,7 +1,8 @@
-import express from "express";
+import Router from "express";
 import { PrismaClient } from "@prisma/client";
+import { addProduct, getProducts } from "./products/controller.js";
 
-const router = express.Router();
+const router = Router();
 const prisma = new PrismaClient();
 
 // Registration route
@@ -61,53 +62,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Create a new product
-router.post("/products", async (req, res) => {
-  try {
-    const {
-      title,
-      description,
-      purchase_price,
-      rent_price,
-      rent_duration,
-      categories,
-    } = req.body;
+// Get all products of user
+router.get("/products", getProducts);
 
-    const userId = 1; // Replace this with the actual user ID
+// Add Product
+router.post("/products", addProduct);
 
-    // Does user exist?
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      return res
-        .status(404)
-        .json({ error: "How did you get here, user? GO SIGNUP!" });
-    }
-
-    // Create new product and associate it with user
-    const product = await prisma.product.create({
-      data: {
-        title,
-        description,
-        purchase_price,
-        rent_price,
-        rent_duration,
-        owner: {
-          connect: { id: userId },
-        },
-        categories: {
-          connect: categories.map((categoryId) => ({ id: categoryId })),
-        },
-      },
-    });
-
-    // New product
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: "Error creating product" });
-  }
-});
-
-// Update a product by ID
+// Edit Product
 router.patch("/products/:productId", async (req, res) => {
   const { productId } = req.params;
   const {
@@ -151,14 +112,9 @@ router.patch("/products/:productId", async (req, res) => {
   }
 });
 
-// Delete a product by ID
+// Delete Product
 router.delete("/products/:productId", async (req, res) => {
   // Handle deleting a product here
-});
-
-// Get all products
-router.get("/products", async (req, res) => {
-  res.json({ message: "hello I am all products" });
 });
 
 export default router;

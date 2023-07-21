@@ -28,7 +28,7 @@ const Signup = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/register",
+        "http://localhost:3001/api/v1/register",
         form.values
       );
       console.log("User registered:", response.data);
