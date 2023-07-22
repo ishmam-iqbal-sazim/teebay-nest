@@ -77,6 +77,6 @@ router.post("/product", addProduct);
 router.delete("/:userId/:productId/2", deleteProduct);
 
 // Edit Product
-router.patch("/product", editProduct);
+router.patch("/:userId/:productId/1", editProduct);
 
 export default router;

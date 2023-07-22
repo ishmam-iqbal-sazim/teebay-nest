@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  Box,
   Button,
   Center,
   Container,
@@ -12,10 +11,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import AddProduct from "../components/AddProduct";
+import EditProduct from "../components/EditProduct";
 
 const MyProducts = () => {
   let userId = 1; // placeholder
   const [isAddProductClicked, setIsAddProductClicked] = useState(false);
+  const [openEditProduct, setOpenEditProduct] = useState(false);
+  const [productToEdit, setProductToEdit] = useState({});
 
   const queryResults = useQuery(
     ["products"],
@@ -45,15 +47,26 @@ const MyProducts = () => {
     setIsAddProductClicked(false);
   };
 
+  const handleProductCardClick = (product) => {
+    setOpenEditProduct(true);
+    setProductToEdit(product);
+  };
+
+  const handleEditProductClose = () => {
+    setOpenEditProduct(false);
+    setProductToEdit({});
+    queryResults.refetch();
+  };
+
   if (isAddProductClicked) {
     return <AddProduct onClose={handleAddProductClose} />;
   }
 
-  if (isAddProductClicked) {
-    return <AddProduct />;
+  if (openEditProduct) {
+    return (
+      <EditProduct onClose={handleEditProductClose} product={productToEdit} />
+    );
   }
-
-  console.log(products);
 
   const handleDelete = async (productId) => {
     try {
@@ -69,6 +82,7 @@ const MyProducts = () => {
         return;
       }
       // refetch products
+      alert("Product deleted successfully!");
       queryResults.refetch();
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -91,7 +105,11 @@ const MyProducts = () => {
             product.title.toLowerCase().charAt(0).toUpperCase() +
             product.title.slice(1);
           return (
-            <Box key={product.id} my="40px">
+            <Container
+              key={product.id}
+              my="40px"
+              onClick={() => handleProductCardClick(product)}
+            >
               <Flex justify={"space-between"} my={"20px"}>
                 <Title>{formattedTitle}</Title>
                 <ActionIcon
@@ -124,7 +142,7 @@ const MyProducts = () => {
                 <Text>Date posted: 21 July 2023</Text>
                 <Text>134141 views</Text>
               </Flex>
-            </Box>
+            </Container>
           );
         })}
         <Flex justify={"flex-end"}>

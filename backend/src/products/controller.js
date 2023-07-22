@@ -80,7 +80,7 @@ const deleteProduct = async (req, res) => {
   const userId = parseInt(req.params.userId, 10); // convert string to integer
 
   try {
-    const { productId } = req.params;
+    const { productId } = parseInt(req.params.productId, 10);
 
     // Find product by ID
     const product = await prisma.product.findUnique({
@@ -102,10 +102,10 @@ const deleteProduct = async (req, res) => {
 };
 
 const editProduct = async (req, res) => {
-  const userId = 1; // replace later with original userId
+  const userId = parseInt(req.params.userId, 10); // convert string to integer
 
   try {
-    const { productId } = req.params;
+    const productId = parseInt(req.params.productId, 10);
     const {
       title,
       description,
@@ -134,10 +134,9 @@ const editProduct = async (req, res) => {
         rent_price,
         rent_duration,
         categories: {
-          set: categories.map((categoryId) => ({ id: Number(categoryId) })),
+          set: categories.map((category) => ({ name: category })),
         },
       },
-      include: { categories: true },
     });
 
     res.json(updatedProduct);

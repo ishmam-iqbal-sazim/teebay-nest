@@ -83,6 +83,7 @@ function AddProduct({ onClose }) {
         console.error("Error saving product data");
         return;
       }
+      alert("Product added successfully!");
     } catch (error) {
       console.error("Error saving product data:", error);
     }
