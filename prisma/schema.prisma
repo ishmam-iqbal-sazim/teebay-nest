@@ -11,14 +11,16 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique
-  address      String
-  phone_number String
-  first_name   String?
-  last_name    String?
-  password     String
-  products     Product[]
+  id                   Int            @id @default(autoincrement())
+  email                String         @unique
+  address              String
+  phone_number         String
+  first_name           String?
+  last_name            String?
+  password             String
+  products             Product[]
+  ownerTransactions    Transactions[] @relation("OwnerTransactions")
+  customerTransactions Transactions[] @relation("TransactionCustomer")
 }
 
 model Category {
@@ -28,13 +30,33 @@ model Category {
 }
 
 model Product {
-  id             Int        @id @default(autoincrement())
+  id             Int            @id @default(autoincrement())
   title          String
   description    String?
   purchase_price Float
   rent_price     Float
   rent_duration  String
   ownerId        Int
-  owner          User       @relation(fields: [ownerId], references: [id])
+  owner          User           @relation(fields: [ownerId], references: [id])
   categories     Category[]
+  transactions   Transactions[]
+}
+
+enum TransactionStatus {
+  RENTED
+  LENT
+  SOLD
+  BOUGHT
+}
+
+model Transactions {
+  id         Int               @id @default(autoincrement())
+  status     TransactionStatus
+  createdAt  DateTime          @default(now())
+  product    Product           @relation(fields: [productId], references: [id])
+  productId  Int
+  owner      User              @relation("OwnerTransactions", fields: [ownerId], references: [id])
+  ownerId    Int
+  customer   User?             @relation("TransactionCustomer", fields: [customerId], references: [id])
+  customerId Int?
 }

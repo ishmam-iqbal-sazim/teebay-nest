@@ -4,6 +4,7 @@ import {
   addProduct,
   deleteProduct,
   editProduct,
+  getAllProducts,
   getMyProducts,
 } from "./products/controller.js";
 
@@ -66,6 +67,9 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Error logging in" });
   }
 });
+
+// Get all products
+router.get("/products", getAllProducts);
 
 // Get current user products
 router.get("/:userId/products", getMyProducts);

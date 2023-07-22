@@ -21,7 +21,7 @@ const MyProducts = () => {
   const [productToEdit, setProductToEdit] = useState({});
 
   const queryResults = useQuery(
-    ["products"],
+    ["userProducts"],
     async () => {
       const apiRes = await fetch(
         `http://localhost:3001/api/v1/${userId}/products`

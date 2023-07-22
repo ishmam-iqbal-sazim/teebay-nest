@@ -2,6 +2,28 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await prisma.product.findMany({
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        purchase_price: true,
+        rent_price: true,
+        rent_duration: true,
+        ownerId: true,
+        owner: true,
+        categories: true,
+      },
+    });
+
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving products" });
+  }
+};
+
 const getMyProducts = async (req, res) => {
   const userId = parseInt(req.params.userId, 10); // convert string to integer
 
@@ -81,7 +103,6 @@ const deleteProduct = async (req, res) => {
 
   try {
     const productId = parseInt(req.params.productId, 10);
-    console.log(userId, productId);
 
     // Find product by ID
     const product = await prisma.product.findUnique({
@@ -146,4 +167,10 @@ const editProduct = async (req, res) => {
   }
 };
 
-export { getMyProducts, addProduct, deleteProduct, editProduct };
+export {
+  getAllProducts,
+  getMyProducts,
+  addProduct,
+  deleteProduct,
+  editProduct,
+};
