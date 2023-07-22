@@ -8,7 +8,6 @@ const getMyProducts = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: { categories: true },
     });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -16,7 +15,6 @@ const getMyProducts = async (req, res) => {
     const products = await prisma.product.findMany({
       where: { ownerId: userId },
       select: {
-        id: true,
         title: true,
         description: true,
         purchase_price: true,
