@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const getMyProducts = async (req, res) => {
-  const userId = 1; // replace later with original userId
+  const userId = parseInt(req.params.userId, 10); // convert string to integer
 
   try {
     const user = await prisma.user.findUnique({
@@ -15,6 +15,7 @@ const getMyProducts = async (req, res) => {
     const products = await prisma.product.findMany({
       where: { ownerId: userId },
       select: {
+        id: true,
         title: true,
         description: true,
         purchase_price: true,
@@ -47,7 +48,6 @@ const addProduct = async (req, res) => {
   // Does user exist?
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    include: { categories: true },
   });
   if (!user) {
     return res
@@ -67,7 +67,7 @@ const addProduct = async (req, res) => {
         connect: { id: userId },
       },
       categories: {
-        connect: categories.map((categoryId) => ({ id: categoryId })),
+        connect: categories.map((category) => ({ name: category })),
       },
     },
   });
@@ -77,7 +77,7 @@ const addProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-  const userId = 1; // replace later with original userId
+  const userId = parseInt(req.params.userId, 10); // convert string to integer
 
   try {
     const { productId } = req.params;

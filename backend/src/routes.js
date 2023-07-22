@@ -68,13 +68,13 @@ router.post("/login", async (req, res) => {
 });
 
 // Get current user products
-router.get("/products", getMyProducts);
+router.get("/:userId/products", getMyProducts);
 
 // Add Product
 router.post("/product", addProduct);
 
 // Delete Product
-router.delete("/product/:productId", deleteProduct);
+router.delete("/:userId/:productId/2", deleteProduct);
 
 // Edit Product
 router.patch("/product", editProduct);
