@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   Button,
+  Card,
   Center,
   Container,
   Flex,
@@ -45,6 +46,7 @@ const MyProducts = () => {
 
   const handleAddProductClose = () => {
     setIsAddProductClicked(false);
+    queryResults.refetch();
   };
 
   const handleProductCardClick = (product) => {
@@ -82,7 +84,6 @@ const MyProducts = () => {
         return;
       }
       // refetch products
-      alert("Product deleted successfully!");
       queryResults.refetch();
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -105,9 +106,12 @@ const MyProducts = () => {
             product.title.toLowerCase().charAt(0).toUpperCase() +
             product.title.slice(1);
           return (
-            <Container
+            <Card
               key={product.id}
-              my="40px"
+              shadow="xs"
+              my={"xl"}
+              padding="lg"
+              withBorder
               onClick={() => handleProductCardClick(product)}
             >
               <Flex justify={"space-between"} my={"20px"}>
@@ -116,7 +120,12 @@ const MyProducts = () => {
                   size={"lg"}
                   variant="transparent"
                   mx={"10px"}
-                  onClick={() => handleDelete(product.id)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    // implement modal later
+                    let productId = product.id;
+                    handleDelete(productId);
+                  }}
                 >
                   <FaTrash size={30} color="black" />
                 </ActionIcon>
@@ -142,7 +151,7 @@ const MyProducts = () => {
                 <Text>Date posted: 21 July 2023</Text>
                 <Text>134141 views</Text>
               </Flex>
-            </Container>
+            </Card>
           );
         })}
         <Flex justify={"flex-end"}>

@@ -80,7 +80,8 @@ const deleteProduct = async (req, res) => {
   const userId = parseInt(req.params.userId, 10); // convert string to integer
 
   try {
-    const { productId } = parseInt(req.params.productId, 10);
+    const productId = parseInt(req.params.productId, 10);
+    console.log(userId, productId);
 
     // Find product by ID
     const product = await prisma.product.findUnique({
