@@ -8,6 +8,10 @@ import {
   getMyProducts,
   buyProduct,
   rentProduct,
+  getBoughtProducts,
+  getSoldProducts,
+  getRentedProducts,
+  getLentProducts,
 } from "./products/controller.js";
 
 const router = Router();
@@ -76,6 +80,18 @@ router.get("/products", getAllProducts);
 // Get current user products
 router.get("/:userId/products", getMyProducts);
 
+// Get current user bought products
+router.get("/:userId/bought", getBoughtProducts);
+
+// Get current user sold products
+router.get("/:userId/sold", getSoldProducts);
+
+// Get current user rented products
+router.get("/:userId/rented", getRentedProducts);
+
+// Get current user lent produrend
+router.get("/:userId/lent", getLentProducts);
+
 // Add Product
 router.post("/product", addProduct);
 
@@ -88,6 +104,7 @@ router.patch("/:userId/:productId/1", editProduct);
 // Product Purchase
 router.post("/buy/:userId/:productId", buyProduct);
 
+// Product Rent
 router.post("/rent/:userId/:productId", rentProduct);
 
 export default router;

@@ -118,10 +118,10 @@ const BuyOrRent = ({ product, onClose }) => {
           <Text>{reshapedProduct.description}</Text>
         </Box>
         <Group position="right">
-          <Button color="violet" onClick={handleRentClick}>
+          <Button uppercase color="violet" onClick={handleRentClick}>
             Rent
           </Button>
-          <Button color="violet" onClick={handleBuyClick}>
+          <Button uppercase color="violet" onClick={handleBuyClick}>
             Buy
           </Button>
         </Group>
@@ -144,10 +144,10 @@ const BuyOrRent = ({ product, onClose }) => {
             />
           </Group>
           <Group position="right" spacing={"md"} mt={"5rem"}>
-            <Button onClick={rentClose} color="red">
+            <Button uppercase onClick={rentClose} color="red">
               Go Back
             </Button>
-            <Button color="violet" onClick={handleRentConfirm}>
+            <Button uppercase color="violet" onClick={handleRentConfirm}>
               Confirm Rent
             </Button>
           </Group>
@@ -157,10 +157,10 @@ const BuyOrRent = ({ product, onClose }) => {
             Are you sure you want to buy this Product?
           </Title>
           <Group position="right" spacing={"lg"} mt={"5rem"}>
-            <Button onClick={buyClose} color="red">
+            <Button uppercase onClick={buyClose} color="red">
               No
             </Button>
-            <Button color="violet" onClick={handleBuyConfirm}>
+            <Button uppercase color="violet" onClick={handleBuyConfirm}>
               Yes
             </Button>
           </Group>

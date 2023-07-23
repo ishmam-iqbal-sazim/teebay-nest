@@ -4,6 +4,7 @@ import {
   Center,
   Container,
   Flex,
+  Group,
   Text,
   Title,
 } from "@mantine/core";
@@ -11,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import NoteToSelf from "../components/NoteToSelf";
 import { useState } from "react";
 import BuyOrRent from "../components/BuyOrRent";
+import { Link } from "react-router-dom";
 
 const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);
@@ -29,6 +31,8 @@ const AllProducts = () => {
   );
 
   const products = queryResults.data;
+
+  console.log(products);
 
   if (queryResults.isLoading) {
     return <Center>...Loading</Center>;
@@ -63,9 +67,11 @@ const AllProducts = () => {
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           ALL PRODUCTS{" "}
         </Title>
-        {products ? (
-          <Center>
-            <Title>No Products to display</Title>
+        {!products ? (
+          <Center mb={"xl"}>
+            <Card my={"xl"} padding="xl" size={"xl"}>
+              <Title order={3}>No products to display</Title>
+            </Card>
           </Center>
         ) : (
           products.map((product) => {
@@ -109,6 +115,11 @@ const AllProducts = () => {
             );
           })
         )}
+        <Group position="left">
+          <Link to={`/my-products`}>
+            <Button uppercase>My Products</Button>
+          </Link>
+        </Group>
       </Container>
     </div>
   );

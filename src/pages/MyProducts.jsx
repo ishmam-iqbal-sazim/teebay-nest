@@ -5,6 +5,7 @@ import {
   Center,
   Container,
   Flex,
+  Group,
   Text,
   Title,
 } from "@mantine/core";
@@ -14,6 +15,7 @@ import { FaTrash } from "react-icons/fa";
 import AddProduct from "../components/AddProduct";
 import EditProduct from "../components/EditProduct";
 import NoteToSelf from "../components/NoteToSelf";
+import { Link } from "react-router-dom";
 
 const MyProducts = () => {
   let userId = 1; // placeholder
@@ -91,6 +93,8 @@ const MyProducts = () => {
     }
   };
 
+  console.log(products.length);
+
   return (
     <div>
       {/* // TODO */}
@@ -105,7 +109,7 @@ const MyProducts = () => {
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           MY PRODUCTS{" "}
         </Title>
-        {products.length === 0 ? (
+        {products.length == 0 ? (
           <Center mb={"xl"}>
             <Card my={"xl"} padding="xl" size={"xl"}>
               <Title order={3}>You have no products</Title>
@@ -166,17 +170,14 @@ const MyProducts = () => {
             );
           })
         )}
-        <Flex justify={"flex-end"}>
-          <Button
-            color="violet"
-            mb="50px"
-            mt={"30px"}
-            uppercase
-            onClick={handleAddProductClick}
-          >
+        <Group position="apart">
+          <Link to={`/all-products`}>
+            <Button uppercase>All Products</Button>
+          </Link>
+          <Button color="violet" uppercase onClick={handleAddProductClick}>
             Add Product
           </Button>
-        </Flex>
+        </Group>
       </Container>
     </div>
   );
