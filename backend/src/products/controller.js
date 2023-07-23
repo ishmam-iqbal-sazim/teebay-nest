@@ -167,10 +167,87 @@ const editProduct = async (req, res) => {
   }
 };
 
+const buyProduct = async (req, res) => {
+  const customerId = parseInt(req.params.userId, 10);
+  const productId = parseInt(req.params.productId, 10);
+
+  console.log(customerId, productId);
+
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: Number(productId) },
+      include: { categories: true, owner: true },
+    });
+
+    if (!product || product.ownerId === customerId) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Checks
+    const existingTransaction = await prisma.transactions.findFirst({
+      where: {
+        productId: productId,
+        userId: product.ownerId,
+        status: { in: ["SOLD", "BOUGHT"] },
+      },
+    });
+
+    if (existingTransaction) {
+      return res.status(400).json({
+        error: "Product has already been sold",
+      });
+    }
+
+    // Create a new transaction for the purchase and one for the seller (owner)
+    const transaction = await prisma.transactions.create({
+      data: {
+        status: "BOUGHT", // Set status "BOUGHT" for customer
+        product: {
+          connect: { id: productId },
+        },
+        user: {
+          connect: { id: customerId },
+        },
+      },
+    });
+
+    console.log("checkpoint 5", transaction);
+
+    const soldTransaction = await prisma.transactions.create({
+      data: {
+        status: "SOLD", // Set status "SOLD" owner (seller)
+        product: {
+          connect: { id: productId },
+        },
+        user: {
+          connect: { id: product.ownerId },
+        },
+      },
+    });
+
+    console.log("checkpoint 6", soldTransaction);
+
+    // Update product ownership
+    await prisma.product.update({
+      where: { id: productId },
+      data: {
+        ownerId: customerId,
+      },
+    });
+
+    console.log("checkpoint 7");
+
+    res.json({ transaction, soldTransaction });
+  } catch (error) {
+    res.status(500).json({ error: "Error buying product" });
+  }
+};
+
 export {
   getAllProducts,
   getMyProducts,
   addProduct,
   deleteProduct,
   editProduct,
+  buyProduct,
 };

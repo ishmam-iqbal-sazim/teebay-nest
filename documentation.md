@@ -23,3 +23,5 @@ Both fe and be completed for part 2 and that was very challenging for me. Mostly
 Putting a lid on part 2 for now. It's at least functional. Will come back to it later to streamline it further.
 
 ## Starting Part 3
+
+Completed buyProduct be and database funcitonality. Seems to work thus far. More will be revealed when we get to fe. Will work on rentProduct backend functionality.

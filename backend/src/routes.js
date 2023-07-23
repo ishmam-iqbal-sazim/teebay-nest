@@ -6,6 +6,7 @@ import {
   editProduct,
   getAllProducts,
   getMyProducts,
+  buyProduct,
 } from "./products/controller.js";
 
 const router = Router();
@@ -82,5 +83,8 @@ router.delete("/:userId/:productId/2", deleteProduct);
 
 // Edit Product
 router.patch("/:userId/:productId/1", editProduct);
+
+// Product Purchase
+router.post("/buy/:userId/:productId", buyProduct);
 
 export default router;
