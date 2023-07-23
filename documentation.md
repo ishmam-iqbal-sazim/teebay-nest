@@ -27,3 +27,5 @@ Putting a lid on part 2 for now. It's at least functional. Will come back to it 
 Completed buyProduct be and database funcitonality. Seems to work thus far. More will be revealed when we get to fe. Will now work on rentProduct backend functionality.
 
 Addition of the buyProduct function resulted in the delete product button not working in MyProducts page. That was likely because after the transaction, the product sold was still being displayed. So implemented the logic in MyProducts get function such that those products with the status of sold do not get displayed. I did not delete the productId from the user table altogether as it might be useful to keep a transaction history.
+
+Preliminary implementation of rentProduct functionality. Now moving to fe to see how it works. Will, for sure, have to come back to it later to refine it or change it.

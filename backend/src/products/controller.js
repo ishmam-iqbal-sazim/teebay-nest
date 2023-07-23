@@ -192,8 +192,6 @@ const buyProduct = async (req, res) => {
   const customerId = parseInt(req.params.userId, 10);
   const productId = parseInt(req.params.productId, 10);
 
-  console.log(customerId, productId);
-
   try {
     const product = await prisma.product.findUnique({
       where: { id: productId },
@@ -231,8 +229,6 @@ const buyProduct = async (req, res) => {
       },
     });
 
-    console.log("checkpoint 5", transaction);
-
     const soldTransaction = await prisma.transactions.create({
       data: {
         status: "SOLD", // Set status "SOLD" owner (seller)
@@ -245,8 +241,6 @@ const buyProduct = async (req, res) => {
       },
     });
 
-    console.log("checkpoint 6", soldTransaction);
-
     // Update product ownership
     await prisma.product.update({
       where: { id: productId },
@@ -254,8 +248,6 @@ const buyProduct = async (req, res) => {
         ownerId: customerId,
       },
     });
-
-    console.log("checkpoint 7");
 
     res.json({ transaction, soldTransaction });
   } catch (error) {
@@ -267,8 +259,6 @@ const rentProduct = async (req, res) => {
   const customerId = parseInt(req.params.userId, 10);
   const productId = parseInt(req.params.productId, 10);
   const { rent_duration } = req.body;
-
-  console.log(customerId, productId, rent_duration);
 
   try {
     const product = await prisma.product.findUnique({
@@ -322,8 +312,6 @@ const rentProduct = async (req, res) => {
       },
     });
 
-    console.log("checkpoint 5", transaction);
-
     const lendTransaction = await prisma.transactions.create({
       data: {
         status: "LENT", // Set status "LENT" for owner (lender)
@@ -335,8 +323,6 @@ const rentProduct = async (req, res) => {
         },
       },
     });
-
-    console.log("checkpoint 6", lendTransaction);
 
     // Update product ownership (owner remains the same)
     if (rent_duration) {
@@ -357,17 +343,147 @@ const rentProduct = async (req, res) => {
       });
     }
 
-    console.log("checkpoint 7");
-
     res.json({ transaction, lendTransaction });
   } catch (error) {
     res.status(500).json({ error: "Error renting/lending product" });
   }
 };
 
+const getBoughtProducts = async (req, res) => {
+  const customerId = parseInt(req.params.userId, 10);
+
+  try {
+    const boughtProducts = await prisma.product.findMany({
+      where: {
+        transactions: {
+          some: {
+            userId: customerId,
+            status: "BOUGHT",
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        purchase_price: true,
+        rent_price: true,
+        rent_duration: true,
+        ownerId: true,
+        owner: true,
+        categories: true,
+      },
+    });
+
+    res.json(boughtProducts);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving bought products" });
+  }
+};
+
+const getRentedProducts = async (req, res) => {
+  const customerId = parseInt(req.params.userId, 10);
+
+  try {
+    const rentedProducts = await prisma.product.findMany({
+      where: {
+        transactions: {
+          some: {
+            userId: customerId,
+            status: "RENTED",
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        purchase_price: true,
+        rent_price: true,
+        rent_duration: true,
+        ownerId: true,
+        owner: true,
+        categories: true,
+      },
+    });
+
+    res.json(rentedProducts);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving rented products" });
+  }
+};
+
+const getSoldProducts = async (req, res) => {
+  const ownerId = parseInt(req.params.userId, 10);
+
+  try {
+    const soldProducts = await prisma.product.findMany({
+      where: {
+        transactions: {
+          some: {
+            userId: ownerId,
+            status: "SOLD",
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        purchase_price: true,
+        rent_price: true,
+        rent_duration: true,
+        ownerId: true,
+        owner: true,
+        categories: true,
+      },
+    });
+
+    res.json(soldProducts);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving sold products" });
+  }
+};
+
+const getLentProducts = async (req, res) => {
+  const ownerId = parseInt(req.params.userId, 10);
+
+  try {
+    const lentProducts = await prisma.product.findMany({
+      where: {
+        transactions: {
+          some: {
+            userId: ownerId,
+            status: "LENT",
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        purchase_price: true,
+        rent_price: true,
+        rent_duration: true,
+        ownerId: true,
+        owner: true,
+        categories: true,
+      },
+    });
+
+    res.json(lentProducts);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving lent products" });
+  }
+};
+
 export {
   getAllProducts,
   getMyProducts,
+  getBoughtProducts,
+  getSoldProducts,
+  getRentedProducts,
+  getLentProducts,
   addProduct,
   deleteProduct,
   editProduct,
