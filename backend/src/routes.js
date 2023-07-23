@@ -7,6 +7,7 @@ import {
   getAllProducts,
   getMyProducts,
   buyProduct,
+  rentProduct,
 } from "./products/controller.js";
 
 const router = Router();
@@ -86,5 +87,7 @@ router.patch("/:userId/:productId/1", editProduct);
 
 // Product Purchase
 router.post("/buy/:userId/:productId", buyProduct);
+
+router.post("/rent/:userId/:productId", rentProduct);
 
 export default router;

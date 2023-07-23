@@ -35,7 +35,16 @@ const getMyProducts = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
     const products = await prisma.product.findMany({
-      where: { ownerId: userId },
+      where: {
+        ownerId: userId,
+        transactions: {
+          every: {
+            status: {
+              not: "SOLD",
+            },
+          },
+        },
+      },
       select: {
         id: true,
         title: true,
@@ -106,7 +115,7 @@ const deleteProduct = async (req, res) => {
 
     // Find product by ID
     const product = await prisma.product.findUnique({
-      where: { id: Number(productId) },
+      where: { id: productId },
       include: { categories: true },
     });
 
@@ -139,7 +148,7 @@ const editProduct = async (req, res) => {
 
     // Find product by ID
     const product = await prisma.product.findUnique({
-      where: { id: Number(productId) },
+      where: { id: productId },
       include: { categories: true },
     });
 
@@ -148,7 +157,7 @@ const editProduct = async (req, res) => {
     }
 
     const updatedProduct = await prisma.product.update({
-      where: { id: Number(productId) },
+      where: { id: productId },
       data: {
         title,
         description,
@@ -175,7 +184,7 @@ const buyProduct = async (req, res) => {
 
   try {
     const product = await prisma.product.findUnique({
-      where: { id: Number(productId) },
+      where: { id: productId },
       include: { categories: true, owner: true },
     });
 
@@ -198,7 +207,6 @@ const buyProduct = async (req, res) => {
       });
     }
 
-    // Create a new transaction for the purchase and one for the seller (owner)
     const transaction = await prisma.transactions.create({
       data: {
         status: "BOUGHT", // Set status "BOUGHT" for customer
@@ -243,6 +251,108 @@ const buyProduct = async (req, res) => {
   }
 };
 
+const rentProduct = async (req, res) => {
+  const customerId = parseInt(req.params.userId, 10);
+  const productId = parseInt(req.params.productId, 10);
+  const { rent_duration } = req.body;
+
+  console.log(customerId, productId, rent_duration);
+
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      include: { categories: true, owner: true },
+    });
+
+    if (!product || product.ownerId === customerId) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Checks
+    const existingBoughtTransaction = await prisma.transactions.findFirst({
+      where: {
+        productId: productId,
+        userId: product.ownerId,
+        status: { in: ["SOLD", "BOUGHT"] },
+      },
+    });
+
+    if (existingBoughtTransaction) {
+      return res.status(400).json({
+        error: "Product has already been sold",
+      });
+    }
+
+    const existingLentTransaction = await prisma.transactions.findFirst({
+      where: {
+        productId: productId,
+        userId: product.ownerId,
+        status: { in: ["LENT"] },
+      },
+    });
+
+    if (existingLentTransaction) {
+      return res.status(400).json({
+        error: "Product has already been rented",
+      });
+    }
+
+    // Create a new transaction for the rent/lend and one for the owner
+    const transaction = await prisma.transactions.create({
+      data: {
+        status: "RENTED", // Set status "RENTED" for customer
+        product: {
+          connect: { id: productId },
+        },
+        user: {
+          connect: { id: customerId },
+        },
+      },
+    });
+
+    console.log("checkpoint 5", transaction);
+
+    const lendTransaction = await prisma.transactions.create({
+      data: {
+        status: "LENT", // Set status "LENT" for owner (lender)
+        product: {
+          connect: { id: productId },
+        },
+        user: {
+          connect: { id: product.ownerId },
+        },
+      },
+    });
+
+    console.log("checkpoint 6", lendTransaction);
+
+    // Update product ownership (owner remains the same)
+    if (rent_duration) {
+      // rent_duration is optional
+      await prisma.product.update({
+        where: { id: productId },
+        data: {
+          ownerId: customerId,
+          rent_duration: rent_duration, // Set rent_duration for the product
+        },
+      });
+    } else {
+      await prisma.product.update({
+        where: { id: productId },
+        data: {
+          ownerId: customerId,
+        },
+      });
+    }
+
+    console.log("checkpoint 7");
+
+    res.json({ transaction, lendTransaction });
+  } catch (error) {
+    res.status(500).json({ error: "Error renting/lending product" });
+  }
+};
+
 export {
   getAllProducts,
   getMyProducts,
@@ -250,4 +360,5 @@ export {
   deleteProduct,
   editProduct,
   buyProduct,
+  rentProduct,
 };

@@ -13,6 +13,7 @@ import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import AddProduct from "../components/AddProduct";
 import EditProduct from "../components/EditProduct";
+import NoteToSelf from "../components/NoteToSelf";
 
 const MyProducts = () => {
   let userId = 1; // placeholder
@@ -92,6 +93,9 @@ const MyProducts = () => {
 
   return (
     <div>
+      {/* // TODO */}
+      <NoteToSelf />
+      {/* // TODO */}
       <Flex m={"10px"} justify={"flex-end"}>
         <Button color="red" mr="10px" mt="10px" uppercase>
           Logout
@@ -101,59 +105,67 @@ const MyProducts = () => {
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           MY PRODUCTS{" "}
         </Title>
-        {products.map((product) => {
-          const formattedTitle =
-            product.title.toLowerCase().charAt(0).toUpperCase() +
-            product.title.slice(1);
-          return (
-            <Card
-              key={product.id}
-              shadow="xs"
-              my={"xl"}
-              padding="lg"
-              withBorder
-              onClick={() => handleProductCardClick(product)}
-            >
-              <Flex justify={"space-between"} my={"20px"}>
-                <Title>{formattedTitle}</Title>
-                <ActionIcon
-                  size={"lg"}
-                  variant="transparent"
-                  mx={"10px"}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    // implement modal later
-                    let productId = product.id;
-                    handleDelete(productId);
-                  }}
-                >
-                  <FaTrash size={30} color="black" />
-                </ActionIcon>
-              </Flex>
-              <Text>
-                Categories:{" "}
-                {product.categories
-                  .map((category) => {
-                    const categoryName = category.name.toLowerCase();
-                    return (
-                      categoryName.charAt(0).toUpperCase() +
-                      categoryName.slice(1)
-                    );
-                  })
-                  .join(", ")}
-              </Text>
-              <Text>
-                {product.purchase_price} | Rent: $
-                {`${product.rent_price} ${product.rent_duration}`}
-              </Text>
-              <Text>{product.description}</Text>
-              <Flex justify={"space-between"}>
-                <Text>Date posted: 21 July 2023</Text>
-                <Text>134141 views</Text>
-              </Flex>
+        {products.length === 0 ? (
+          <Center mb={"xl"}>
+            <Card my={"xl"} padding="xl" size={"xl"}>
+              <Title order={3}>You have no products</Title>
             </Card>
-          );
-        })}
+          </Center>
+        ) : (
+          products.map((product) => {
+            const formattedTitle =
+              product.title.toLowerCase().charAt(0).toUpperCase() +
+              product.title.slice(1);
+            return (
+              <Card
+                key={product.id}
+                shadow="xs"
+                my={"xl"}
+                padding="lg"
+                withBorder
+                onClick={() => handleProductCardClick(product)}
+              >
+                <Flex justify={"space-between"} my={"20px"}>
+                  <Title>{formattedTitle}</Title>
+                  <ActionIcon
+                    size={"lg"}
+                    variant="transparent"
+                    mx={"10px"}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      // implement modal later
+                      let productId = product.id;
+                      handleDelete(productId);
+                    }}
+                  >
+                    <FaTrash size={30} color="black" />
+                  </ActionIcon>
+                </Flex>
+                <Text>
+                  Categories:{" "}
+                  {product.categories
+                    .map((category) => {
+                      const categoryName = category.name.toLowerCase();
+                      return (
+                        categoryName.charAt(0).toUpperCase() +
+                        categoryName.slice(1)
+                      );
+                    })
+                    .join(", ")}
+                </Text>
+                <Text>
+                  {product.purchase_price} | Rent: $
+                  {`${product.rent_price} ${product.rent_duration}`}
+                </Text>
+                <Text>{product.description}</Text>
+                <Flex justify={"space-between"}>
+                  <Text>Date posted: 21 July 2023</Text>
+                  <Text>134141 views</Text>
+                </Flex>
+              </Card>
+            );
+          })
+        )}
         <Flex justify={"flex-end"}>
           <Button
             color="violet"

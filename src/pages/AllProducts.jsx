@@ -8,6 +8,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+import NoteToSelf from "../components/NoteToSelf";
 
 const AllProducts = () => {
   const queryResults = useQuery(
@@ -32,6 +33,9 @@ const AllProducts = () => {
 
   return (
     <div>
+      {/* // TODO */}
+      <NoteToSelf />
+      {/* // TODO */}
       <Flex m={"10px"} justify={"flex-end"}>
         <Button color="red" mr="10px" mt="10px" uppercase>
           Logout
