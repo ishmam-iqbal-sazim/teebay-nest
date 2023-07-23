@@ -5,6 +5,18 @@ const prisma = new PrismaClient();
 const getAllProducts = async (req, res) => {
   try {
     const products = await prisma.product.findMany({
+      where: {
+        // filtering products that are already sold or rented
+        transactions: {
+          every: {
+            NOT: {
+              status: {
+                in: ["SOLD", "RENTED"],
+              },
+            },
+          },
+        },
+      },
       select: {
         id: true,
         title: true,
