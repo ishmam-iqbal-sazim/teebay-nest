@@ -5,7 +5,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import MyProducts from "./pages/MyProducts";
 import AllProducts from "./pages/AllProducts";
-import UserDashboard from "./pages/UserDashboard";
+import MyTransactions from "./pages/MyTransactions";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +20,7 @@ export default function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/my-products" element={<MyProducts />} />
             <Route path="/all-products" element={<AllProducts />} />
-            <Route path="/my-dashboard" element={<UserDashboard />} />
+            <Route path="/my-transactions" element={<MyTransactions />} />
           </Routes>
           {/* </AppShell> */}
         </BrowserRouter>

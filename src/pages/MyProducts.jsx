@@ -24,7 +24,7 @@ const MyProducts = () => {
   const [productToEdit, setProductToEdit] = useState({});
 
   const queryResults = useQuery(
-    ["userProducts"],
+    [`user${userId}Products`],
     async () => {
       const apiRes = await fetch(
         `http://localhost:3001/api/v1/${userId}/products`
@@ -93,8 +93,6 @@ const MyProducts = () => {
     }
   };
 
-  console.log(products.length);
-
   return (
     <div>
       {/* // TODO */}
@@ -105,9 +103,17 @@ const MyProducts = () => {
           Logout
         </Button>
       </Flex>
-      <Container my={"40px"} size={"lg"}>
+      <Container my={"xl"} size={"lg"}>
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           MY PRODUCTS{" "}
+          <Group position="left">
+            <Link to={`/all-products`}>
+              <Button uppercase>All Products</Button>
+            </Link>
+            <Link to={`/my-transactions`}>
+              <Button uppercase>My Transactions</Button>
+            </Link>
+          </Group>
         </Title>
         {products.length == 0 ? (
           <Center mb={"xl"}>
@@ -170,10 +176,7 @@ const MyProducts = () => {
             );
           })
         )}
-        <Group position="apart">
-          <Link to={`/all-products`}>
-            <Button uppercase>All Products</Button>
-          </Link>
+        <Group position="right">
           <Button color="violet" uppercase onClick={handleAddProductClick}>
             Add Product
           </Button>

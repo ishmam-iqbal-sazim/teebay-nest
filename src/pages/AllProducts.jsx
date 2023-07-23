@@ -32,8 +32,6 @@ const AllProducts = () => {
 
   const products = queryResults.data;
 
-  console.log(products);
-
   if (queryResults.isLoading) {
     return <Center>...Loading</Center>;
   }
@@ -63,10 +61,18 @@ const AllProducts = () => {
           Logout
         </Button>
       </Flex>
-      <Container my={"xl"} py={"xl"} size={"lg"}>
+      <Container my={"xl"} size={"lg"}>
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           ALL PRODUCTS{" "}
         </Title>
+        <Group position="left">
+          <Link to={`/my-products`}>
+            <Button uppercase>My Products</Button>
+          </Link>
+          <Link to={`/my-transactions`}>
+            <Button uppercase>My Transactions</Button>
+          </Link>
+        </Group>
         {!products ? (
           <Center mb={"xl"}>
             <Card my={"xl"} padding="xl" size={"xl"}>
@@ -115,11 +121,6 @@ const AllProducts = () => {
             );
           })
         )}
-        <Group position="left">
-          <Link to={`/my-products`}>
-            <Button uppercase>My Products</Button>
-          </Link>
-        </Group>
       </Container>
     </div>
   );
