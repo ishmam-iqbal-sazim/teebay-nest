@@ -26,7 +26,6 @@ const Header = ({ user }) => {
               variant="gradient"
               gradient={{ from: "indigo", to: "violet", deg: 60 }}
               sx={{
-                fontFamily: "Greycliff CF, sans-serif",
                 userSelect: "none",
               }}
               ta="center"

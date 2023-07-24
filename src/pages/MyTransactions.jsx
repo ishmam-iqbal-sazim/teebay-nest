@@ -5,10 +5,17 @@ import BorrowedProducts from "../components/transactionRecords/BorrowedProducts"
 import LentProducts from "../components/transactionRecords/LentProducts";
 import { Link } from "react-router-dom";
 import NotLoggedIn from "../components/NotLoggedIn";
-
-let user = JSON.parse(localStorage.getItem("currentUser"));
+import { useEffect, useState } from "react";
 
 const MyTransactions = () => {
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser"))
+  );
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("currentUser")));
+  }, []);
+
   let userId = user?.id;
 
   if (!userId) {

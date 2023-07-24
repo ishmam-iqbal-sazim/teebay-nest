@@ -22,6 +22,14 @@ router.post("/register", async (req, res) => {
   const { email, password, address, phone_number, first_name, last_name } =
     req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email and password are required." });
+  }
+
+  if (!first_name) {
+    return res.status(401).json({ error: "First name is required" });
+  }
+
   try {
     // Does user already exist?
     const existingUser = await prisma.user.findUnique({ where: { email } });

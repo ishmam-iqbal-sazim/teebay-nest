@@ -13,13 +13,24 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const form = useForm({
+    validateInputOnChange: true,
     initialValues: {
       email: "",
       password: "",
+      confirmPassword: "",
       address: "",
       phone_number: "",
       first_name: "",
       last_name: "",
+    },
+    validate: {
+      first_name: (value) =>
+        value.length < 2 ? "Name must have at least 2 letters" : null,
+      last_name: (value) =>
+        value.length < 2 ? "Name must have at least 2 letters" : null,
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      confirmPassword: (value, values) =>
+        value !== values.password ? "Passwords did not match" : null,
     },
   });
 
@@ -31,8 +42,8 @@ const Signup = () => {
         "http://localhost:3001/api/v1/register",
         form.values
       );
-      console.log("User registered:", response.data);
       if (response.data.id) {
+        alert("Successfully signed up! Login to continue.");
         navigate("/");
       }
     } catch (error) {
@@ -90,7 +101,7 @@ const Signup = () => {
           <PasswordInput
             mt="md"
             placeholder="Confirm password"
-            {...form.getInputProps("password")}
+            {...form.getInputProps("confirmPassword")}
           />
           <Center>
             <Button mt="xl" type="button" onClick={handleSubmit}>
