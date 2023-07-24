@@ -15,8 +15,11 @@ import {
 import { useForm } from "@mantine/form";
 import { GrClose } from "react-icons/gr";
 
+let user = JSON.parse(localStorage.getItem("currentUser"));
+
 // eslint-disable-next-line react/prop-types
 function AddProduct({ onClose }) {
+  let userId = user.id;
   const [active, setActive] = useState(0);
 
   const categories = [
@@ -71,13 +74,16 @@ function AddProduct({ onClose }) {
 
   const handleSubmit = async () => {
     try {
-      const apiRes = await fetch("http://localhost:3001/api/v1/product", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form.values),
-      });
+      const apiRes = await fetch(
+        `http://localhost:3001/api/v1/${userId}/product`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form.values),
+        }
+      );
 
       if (!apiRes.ok) {
         console.error("Error saving product data");

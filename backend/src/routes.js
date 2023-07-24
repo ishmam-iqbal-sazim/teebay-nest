@@ -93,7 +93,7 @@ router.get("/:userId/rented", getRentedProducts);
 router.get("/:userId/lent", getLentProducts);
 
 // Add Product
-router.post("/product", addProduct);
+router.post("/:userId/product", addProduct);
 
 // Delete Product
 router.delete("/:userId/:productId/2", deleteProduct);
@@ -101,10 +101,10 @@ router.delete("/:userId/:productId/2", deleteProduct);
 // Edit Product
 router.patch("/:userId/:productId/1", editProduct);
 
-// Product Purchase
+// Buy Product
 router.post("/buy/:userId/:productId", buyProduct);
 
-// Product Rent
+// Rent Product
 router.post("/rent/:userId/:productId", rentProduct);
 
 export default router;

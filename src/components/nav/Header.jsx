@@ -1,11 +1,14 @@
 import { Button, Grid, Group, Paper, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
 
+let user = JSON.parse(localStorage.getItem("currentUser"));
+
 const Header = () => {
+  console.log(user);
   return (
     <Paper shadow="sm" p="sm">
       <Grid grow px={20}>
-        <Grid.Col span={2} sx={{ verticalAlign: "middle" }}>
+        <Grid.Col span={1} sx={{ verticalAlign: "middle" }}>
           <Group position="center" mt={"1px"}>
             <Text
               variant="gradient"
@@ -42,7 +45,10 @@ const Header = () => {
           </Group>
         </Grid.Col>
         <Grid.Col span={1}>
-          <Group position="right">
+          <Group position="right" grow spacing={"sm"}>
+            <Text color="black" fw={300} fz={"sm"}>
+              Hello, {user.first_name}
+            </Text>
             <Button color="red" uppercase>
               Logout
             </Button>

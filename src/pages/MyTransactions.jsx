@@ -1,19 +1,29 @@
-import { Button, Group, Tabs } from "@mantine/core";
+import { Button, Group, Tabs, Text } from "@mantine/core";
 import BoughtProducts from "../components/transactions/BoughtProducts";
 import SoldProducts from "../components/transactions/SoldProducts";
 import BorrowedProducts from "../components/transactions/BorrowedProducts";
 import LentProducts from "../components/transactions/LentProducts";
 import { Link } from "react-router-dom";
 
+let user = JSON.parse(localStorage.getItem("currentUser"));
+
 const MyTransactions = () => {
-  let userId = 5;
+  let userId = user?.id;
+
+  if (!userId) {
+    return <div>PLease login</div>;
+  }
 
   return (
     <div>
-      <Tabs color="violet" defaultValue="bought">
-        <Tabs.List position="center" grow sx={{ border: "0px" }}>
-          <Tabs.Tab value="bought">Bought</Tabs.Tab>
-          <Tabs.Tab value="sold">Sold</Tabs.Tab>
+      <Tabs py={5} color="violet" defaultValue="bought">
+        <Tabs.List position="center" grow sx={{ border: "0px" }} color="violet">
+          <Tabs.Tab value="bought">
+            <Text>Bought</Text>
+          </Tabs.Tab>
+          <Tabs.Tab value="sold">
+            <Text>Sold</Text>
+          </Tabs.Tab>
           <Tabs.Tab value="borrowed">Borrowed</Tabs.Tab>
           <Tabs.Tab value="lent">Lent</Tabs.Tab>
         </Tabs.List>
@@ -36,10 +46,14 @@ const MyTransactions = () => {
       </Tabs>
       <Group position="center" spacing={"xl"}>
         <Link to={`/my-products`}>
-          <Button uppercase>My Products</Button>
+          <Button variant="subtle" color="violet" uppercase>
+            My Products
+          </Button>
         </Link>
         <Link to={`/all-products`}>
-          <Button uppercase>All Products</Button>
+          <Button variant="subtle" color="violet" uppercase>
+            All Products
+          </Button>
         </Link>
       </Group>
     </div>

@@ -1,6 +1,5 @@
 import { Center, Container, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import NoteToSelf from "../components/NoteToSelf";
 import { useState } from "react";
 import BuyOrRent from "../components/productActions/BuyOrRent";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";

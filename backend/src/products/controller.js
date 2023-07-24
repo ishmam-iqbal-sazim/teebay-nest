@@ -79,7 +79,7 @@ const getMyProducts = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  const userId = 1; // replace later with original userId
+  const userId = parseInt(req.params.userId, 10); // convert string to integer
 
   const {
     title,

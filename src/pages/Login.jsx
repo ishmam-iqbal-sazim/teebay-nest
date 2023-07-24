@@ -11,6 +11,7 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
+// eslint-disable-next-line react/prop-types
 const Login = () => {
   const form = useForm({
     initialValues: {
@@ -27,6 +28,10 @@ const Login = () => {
         "http://localhost:3001/api/v1/login",
         form.values
       );
+      // updateUser(response.data);
+      // Save user data to local storage
+      localStorage.setItem("currentUser", JSON.stringify(response.data));
+
       console.log("User logged in:", response.data);
       if (response.data.id) {
         navigate("/my-products");

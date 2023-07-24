@@ -10,7 +10,7 @@ const ProductCard = ({ product, deleteIcon }) => {
 
   return (
     <div>
-      <Card key={product.id} shadow="sm" my={"xl"} padding="lg" withBorder>
+      <Card key={product.id} shadow="sm" my={"xl"} padding="xl" withBorder>
         <Flex justify={"space-between"} my={"20px"}>
           <Title>{formattedTitle}</Title>
           {deleteIcon && deleteIcon}

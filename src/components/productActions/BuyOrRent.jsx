@@ -13,9 +13,11 @@ import { DateInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { GrClose } from "react-icons/gr";
 
+let user = JSON.parse(localStorage.getItem("currentUser"));
+
 const BuyOrRent = ({ product, onClose }) => {
   // TODO Make components to handle these redundant copy paste calls
-  let userId = 5; //placeholder
+  let userId = user.id; //placeholder
   const [rentOpened, { open: rentOpen, close: rentClose }] =
     useDisclosure(false);
   const [buyOpened, { open: buyOpen, close: buyClose }] = useDisclosure(false);

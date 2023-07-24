@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button, Container, Group, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -8,14 +9,17 @@ import ProductDelete from "../components/DeleteIcon";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
 
+let user = JSON.parse(localStorage.getItem("currentUser"));
+
 const MyProducts = () => {
-  let userId = 1; // placeholder
+  let userId = user.id;
+
   const [isAddProductClicked, setIsAddProductClicked] = useState(false);
   const [openEditProduct, setOpenEditProduct] = useState(false);
   const [productToEdit, setProductToEdit] = useState({});
 
   const queryResults = useQuery(
-    [`user${userId}Products`],
+    [`userProducts`],
     async () => {
       const apiRes = await fetch(
         `http://localhost:3001/api/v1/${userId}/products`
@@ -25,7 +29,8 @@ const MyProducts = () => {
       }
       return apiRes.json();
     },
-    { staleTime: Infinity }
+    { staleTime: Infinity },
+    { enabled: !!userId }
   );
 
   const products = queryResults.data;
@@ -111,7 +116,12 @@ const MyProducts = () => {
           })
         )}
         <Group position="right">
-          <Button color="violet" uppercase onClick={handleAddProductClick}>
+          <Button
+            color="violet"
+            uppercase
+            onClick={handleAddProductClick}
+            m={"lg"}
+          >
             Add Product
           </Button>
         </Group>

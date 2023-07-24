@@ -68,10 +68,18 @@ const EditProduct = ({ product, onClose }) => {
   };
 
   return (
-    <Flex justify="center" align="center" direction="column">
+    <Flex
+      justify="center"
+      align="center"
+      direction="column"
+      style={{ minHeight: "100vh" }}
+    >
       <Box
+        maw={520}
         mx="auto"
         mt="lg"
+        px={"50px"}
+        py={"20px"}
         sx={{
           border: "1px rgba(118, 117, 117, 0.5) solid",
         }}

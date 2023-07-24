@@ -7,10 +7,21 @@ import MyProducts from "./pages/MyProducts";
 import AllProducts from "./pages/AllProducts";
 import MyTransactions from "./pages/MyTransactions";
 import NavbarLayout from "./components/nav/NavbarLayout";
+import { useEffect, useState } from "react";
 
 const queryClient = new QueryClient();
 
 export default function App() {
+  const [currentUser, setCurrentUser] = useState({});
+
+  // Retrieve user data from local storage on component mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <QueryClientProvider client={queryClient}>
@@ -26,7 +37,7 @@ export default function App() {
               path="/my-products"
               element={
                 <NavbarLayout>
-                  <MyProducts />
+                  <MyProducts user={currentUser} />
                 </NavbarLayout>
               }
             />
