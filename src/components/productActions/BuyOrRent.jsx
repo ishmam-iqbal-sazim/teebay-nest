@@ -16,8 +16,7 @@ import { GrClose } from "react-icons/gr";
 let user = JSON.parse(localStorage.getItem("currentUser"));
 
 const BuyOrRent = ({ product, onClose }) => {
-  // TODO Make components to handle these redundant copy paste calls
-  let userId = user.id; //placeholder
+  let userId = user.id;
   const [rentOpened, { open: rentOpen, close: rentClose }] =
     useDisclosure(false);
   const [buyOpened, { open: buyOpen, close: buyClose }] = useDisclosure(false);
@@ -25,8 +24,6 @@ const BuyOrRent = ({ product, onClose }) => {
   const productCategoriesArray = product.categories.map((category) => {
     return category.name;
   });
-
-  console.log(product);
 
   let reshapedProduct = {
     title: product.title,

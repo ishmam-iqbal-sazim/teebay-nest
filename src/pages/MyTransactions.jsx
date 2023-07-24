@@ -1,9 +1,10 @@
 import { Button, Group, Tabs, Text } from "@mantine/core";
-import BoughtProducts from "../components/transactions/BoughtProducts";
-import SoldProducts from "../components/transactions/SoldProducts";
-import BorrowedProducts from "../components/transactions/BorrowedProducts";
-import LentProducts from "../components/transactions/LentProducts";
+import BoughtProducts from "../components/transactionRecords/BoughtProducts";
+import SoldProducts from "../components/transactionRecords/SoldProducts";
+import BorrowedProducts from "../components/transactionRecords/BorrowedProducts";
+import LentProducts from "../components/transactionRecords/LentProducts";
 import { Link } from "react-router-dom";
+import NotLoggedIn from "../components/NotLoggedIn";
 
 let user = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -11,7 +12,7 @@ const MyTransactions = () => {
   let userId = user?.id;
 
   if (!userId) {
-    return <div>PLease login</div>;
+    return <NotLoggedIn />;
   }
 
   return (

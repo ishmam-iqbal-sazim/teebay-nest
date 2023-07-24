@@ -1,9 +1,10 @@
-import { Center, Container, Title } from "@mantine/core";
+import { Container, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import BuyOrRent from "../components/productActions/BuyOrRent";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
+import Loading from "../components/Loading";
 
 const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);
@@ -24,7 +25,7 @@ const AllProducts = () => {
   const products = queryResults.data;
 
   if (queryResults.isLoading) {
-    return <Center>...Loading</Center>;
+    return <Loading />;
   }
 
   const handleProductCardClick = (product) => {
@@ -44,7 +45,7 @@ const AllProducts = () => {
 
   return (
     <div>
-      <Container my={"xl"} size={"lg"}>
+      <Container my={"xl"} py={"xl"} size={"lg"}>
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           ALL PRODUCTS{" "}
         </Title>

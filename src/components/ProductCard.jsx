@@ -2,8 +2,6 @@
 import { Card, Flex, Text, Title } from "@mantine/core";
 
 const ProductCard = ({ product, deleteIcon }) => {
-  console.log(product);
-
   const formattedTitle =
     product.title.toLowerCase().charAt(0).toUpperCase() +
     product.title.slice(1);

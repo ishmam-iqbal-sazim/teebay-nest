@@ -1,10 +1,23 @@
-import { Button, Grid, Group, Paper, Text } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Button, Grid, Group, Modal, Paper, Text, Title } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Link, useNavigate } from "react-router-dom";
 
 let user = JSON.parse(localStorage.getItem("currentUser"));
 
 const Header = () => {
-  console.log(user);
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    open();
+  };
+
+  const handleLogoutConfirm = () => {
+    localStorage.removeItem("currentUser");
+    navigate(`/`);
+  };
+
   return (
     <Paper shadow="sm" p="sm">
       <Grid grow px={20}>
@@ -25,6 +38,7 @@ const Header = () => {
             </Text>
           </Group>
         </Grid.Col>
+
         <Grid.Col span={6}>
           <Group position="right">
             <Link to={`/all-products`}>
@@ -49,12 +63,25 @@ const Header = () => {
             <Text color="black" fw={300} fz={"sm"}>
               Hello, {user.first_name}
             </Text>
-            <Button color="red" uppercase>
+            <Button color="red" uppercase onClick={handleLogoutClick}>
               Logout
             </Button>
           </Group>
         </Grid.Col>
       </Grid>
+      <Modal opened={opened} onClose={close} centered padding={"xl"}>
+        <Title order={2} fw={300}>
+          Are you sure you want to log out?
+        </Title>
+        <Group position="right" spacing={"lg"} mt={"5rem"}>
+          <Button uppercase onClick={close} color="red">
+            No
+          </Button>
+          <Button uppercase color="violet" onClick={handleLogoutConfirm}>
+            Yes
+          </Button>
+        </Group>
+      </Modal>
     </Paper>
   );
 };
