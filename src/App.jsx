@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import MyProducts from "./pages/MyProducts";
 import AllProducts from "./pages/AllProducts";
 import MyTransactions from "./pages/MyTransactions";
+import NavbarLayout from "./components/nav/NavbarLayout";
 
 const queryClient = new QueryClient();
 
@@ -14,15 +15,30 @@ export default function App() {
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          {/* <AppShell header={<Header height={50} p="xs" />}> */}
           <Routes>
+            {/* Pages without Navbar */}
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/my-products" element={<MyProducts />} />
-            <Route path="/all-products" element={<AllProducts />} />
             <Route path="/my-transactions" element={<MyTransactions />} />
+
+            {/* Pages with Navbar */}
+            <Route
+              path="/my-products"
+              element={
+                <NavbarLayout>
+                  <MyProducts />
+                </NavbarLayout>
+              }
+            />
+            <Route
+              path="/all-products"
+              element={
+                <NavbarLayout>
+                  <AllProducts />
+                </NavbarLayout>
+              }
+            />
           </Routes>
-          {/* </AppShell> */}
         </BrowserRouter>
       </QueryClientProvider>
     </MantineProvider>

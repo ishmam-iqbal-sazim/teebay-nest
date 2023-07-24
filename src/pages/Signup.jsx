@@ -34,7 +34,7 @@ const Signup = () => {
       );
       console.log("User registered:", response.data);
       if (response.data.id) {
-        navigate("/my-products");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error registering user:", error.message);

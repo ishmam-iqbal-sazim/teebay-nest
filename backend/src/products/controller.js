@@ -51,8 +51,10 @@ const getMyProducts = async (req, res) => {
         ownerId: userId,
         transactions: {
           every: {
-            status: {
-              not: "SOLD",
+            NOT: {
+              status: {
+                in: ["SOLD", "RENTED"],
+              },
             },
           },
         },

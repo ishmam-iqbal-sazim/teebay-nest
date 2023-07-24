@@ -1,8 +1,8 @@
 import { Button, Group, Tabs } from "@mantine/core";
-import BoughtProducts from "../components/BoughtProducts";
-import SoldProducts from "../components/SoldProducts";
-import BorrowedProducts from "../components/BorrowedProducts";
-import LentProducts from "../components/LentProducts";
+import BoughtProducts from "../components/transactions/BoughtProducts";
+import SoldProducts from "../components/transactions/SoldProducts";
+import BorrowedProducts from "../components/transactions/BorrowedProducts";
+import LentProducts from "../components/transactions/LentProducts";
 import { Link } from "react-router-dom";
 
 const MyTransactions = () => {

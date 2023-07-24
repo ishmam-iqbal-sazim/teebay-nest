@@ -1,18 +1,10 @@
-import {
-  Button,
-  Card,
-  Center,
-  Container,
-  Flex,
-  Group,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Center, Container, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import NoteToSelf from "../components/NoteToSelf";
 import { useState } from "react";
-import BuyOrRent from "../components/BuyOrRent";
-import { Link } from "react-router-dom";
+import BuyOrRent from "../components/productActions/BuyOrRent";
+import NoProductsToDisplay from "../components/NoProductsToDisplay";
+import ProductCard from "../components/ProductCard";
 
 const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);
@@ -53,71 +45,22 @@ const AllProducts = () => {
 
   return (
     <div>
-      {/* // TODO */}
-      <NoteToSelf />
-      {/* // TODO */}
-      <Flex m={"10px"} justify={"flex-end"}>
-        <Button color="red" mr="10px" mt="10px" uppercase>
-          Logout
-        </Button>
-      </Flex>
       <Container my={"xl"} size={"lg"}>
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           ALL PRODUCTS{" "}
         </Title>
-        <Group position="left">
-          <Link to={`/my-products`}>
-            <Button uppercase>My Products</Button>
-          </Link>
-          <Link to={`/my-transactions`}>
-            <Button uppercase>My Transactions</Button>
-          </Link>
-        </Group>
         {!products ? (
-          <Center mb={"xl"}>
-            <Card my={"xl"} padding="xl" size={"xl"}>
-              <Title order={3}>No products to display</Title>
-            </Card>
-          </Center>
+          <NoProductsToDisplay text={"No products to display"} />
         ) : (
           products.map((product) => {
-            const formattedTitle =
-              product.title.toLowerCase().charAt(0).toUpperCase() +
-              product.title.slice(1);
             return (
-              <Card
+              <Container
+                size={"lg"}
                 key={product.id}
-                shadow="xs"
-                my={"xl"}
-                padding="lg"
-                withBorder
                 onClick={() => handleProductCardClick(product)}
               >
-                <Flex justify={"space-between"} my={"20px"}>
-                  <Title>{formattedTitle}</Title>
-                </Flex>
-                <Text>
-                  Categories:{" "}
-                  {product.categories
-                    .map((category) => {
-                      const categoryName = category.name.toLowerCase();
-                      return (
-                        categoryName.charAt(0).toUpperCase() +
-                        categoryName.slice(1)
-                      );
-                    })
-                    .join(", ")}
-                </Text>
-                <Text>
-                  {product.purchase_price} | Rent: $
-                  {`${product.rent_price} ${product.rent_duration}`}
-                </Text>
-                <Text>{product.description}</Text>
-                <Flex justify={"space-between"}>
-                  <Text>Date posted: 21 July 2023</Text>
-                  <Text>134141 views</Text>
-                </Flex>
-              </Card>
+                <ProductCard product={product} />
+              </Container>
             );
           })
         )}

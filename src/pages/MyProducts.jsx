@@ -1,21 +1,12 @@
-import {
-  ActionIcon,
-  Button,
-  Card,
-  Center,
-  Container,
-  Flex,
-  Group,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Button, Container, Group, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import AddProduct from "../components/AddProduct";
-import EditProduct from "../components/EditProduct";
-import NoteToSelf from "../components/NoteToSelf";
-import { Link } from "react-router-dom";
+import AddProduct from "../components/productActions/AddProduct";
+import EditProduct from "../components/productActions/EditProduct";
+import Loading from "../components/Loading";
+import ProductDelete from "../components/DeleteIcon";
+import NoProductsToDisplay from "../components/NoProductsToDisplay";
+import ProductCard from "../components/ProductCard";
 
 const MyProducts = () => {
   let userId = 1; // placeholder
@@ -39,10 +30,6 @@ const MyProducts = () => {
 
   const products = queryResults.data;
 
-  if (queryResults.isLoading) {
-    return <Center>...Loading</Center>;
-  }
-
   const handleAddProductClick = () => {
     setIsAddProductClicked(true);
   };
@@ -62,6 +49,10 @@ const MyProducts = () => {
     setProductToEdit({});
     queryResults.refetch();
   };
+
+  if (queryResults.isLoading) {
+    return <Loading />;
+  }
 
   if (isAddProductClicked) {
     return <AddProduct onClose={handleAddProductClose} />;
@@ -95,84 +86,27 @@ const MyProducts = () => {
 
   return (
     <div>
-      {/* // TODO */}
-      <NoteToSelf />
-      {/* // TODO */}
-      <Flex m={"10px"} justify={"flex-end"}>
-        <Button color="red" mr="10px" mt="10px" uppercase>
-          Logout
-        </Button>
-      </Flex>
-      <Container my={"xl"} size={"lg"}>
+      <Container my="xl" size={"xl"}>
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           MY PRODUCTS{" "}
-          <Group position="left">
-            <Link to={`/all-products`}>
-              <Button uppercase>All Products</Button>
-            </Link>
-            <Link to={`/my-transactions`}>
-              <Button uppercase>My Transactions</Button>
-            </Link>
-          </Group>
         </Title>
         {products.length == 0 ? (
-          <Center mb={"xl"}>
-            <Card my={"xl"} padding="xl" size={"xl"}>
-              <Title order={3}>You have no products</Title>
-            </Card>
-          </Center>
+          <NoProductsToDisplay text={"You have no products"} />
         ) : (
           products.map((product) => {
-            const formattedTitle =
-              product.title.toLowerCase().charAt(0).toUpperCase() +
-              product.title.slice(1);
             return (
-              <Card
+              <Container
+                size={"xl"}
                 key={product.id}
-                shadow="xs"
-                my={"xl"}
-                padding="lg"
-                withBorder
                 onClick={() => handleProductCardClick(product)}
               >
-                <Flex justify={"space-between"} my={"20px"}>
-                  <Title>{formattedTitle}</Title>
-                  <ActionIcon
-                    size={"lg"}
-                    variant="transparent"
-                    mx={"10px"}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      // implement modal later
-                      let productId = product.id;
-                      handleDelete(productId);
-                    }}
-                  >
-                    <FaTrash size={30} color="black" />
-                  </ActionIcon>
-                </Flex>
-                <Text>
-                  Categories:{" "}
-                  {product.categories
-                    .map((category) => {
-                      const categoryName = category.name.toLowerCase();
-                      return (
-                        categoryName.charAt(0).toUpperCase() +
-                        categoryName.slice(1)
-                      );
-                    })
-                    .join(", ")}
-                </Text>
-                <Text>
-                  {product.purchase_price} | Rent: $
-                  {`${product.rent_price} ${product.rent_duration}`}
-                </Text>
-                <Text>{product.description}</Text>
-                <Flex justify={"space-between"}>
-                  <Text>Date posted: 21 July 2023</Text>
-                  <Text>134141 views</Text>
-                </Flex>
-              </Card>
+                <ProductCard
+                  product={product}
+                  deleteIcon={
+                    <ProductDelete onDelete={handleDelete} id={product.id} />
+                  }
+                />
+              </Container>
             );
           })
         )}

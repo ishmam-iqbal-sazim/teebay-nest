@@ -1,15 +1,14 @@
 /* eslint-disable react/prop-types */
-import { Center, Container } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
+import Loading from "../Loading";
 
-const BoughtProducts = ({ userId }) => {
+const SoldProducts = ({ userId }) => {
   const queryResults = useQuery(
-    [`${userId}_BoughtProducts`],
+    [`${userId}_SoldProducts`],
     async () => {
-      const apiRes = await fetch(
-        `http://localhost:3001/api/v1/${userId}/bought`
-      );
+      const apiRes = await fetch(`http://localhost:3001/api/v1/${userId}/sold`);
       if (!apiRes.ok) {
         throw new Error(`products fetch not ok`);
       }
@@ -21,7 +20,7 @@ const BoughtProducts = ({ userId }) => {
   const products = queryResults.data;
 
   if (queryResults.isLoading) {
-    return <Center>...Loading</Center>;
+    return <Loading />;
   }
 
   console.log(products);
@@ -35,4 +34,4 @@ const BoughtProducts = ({ userId }) => {
   );
 };
 
-export default BoughtProducts;
+export default SoldProducts;

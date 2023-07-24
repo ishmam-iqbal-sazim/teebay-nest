@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Center, Container } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
+import Loading from "../Loading";
 
 const BorrowedProducts = ({ userId }) => {
   const queryResults = useQuery(
@@ -21,7 +22,7 @@ const BorrowedProducts = ({ userId }) => {
   const products = queryResults.data;
 
   if (queryResults.isLoading) {
-    return <Center>...Loading</Center>;
+    return <Loading />;
   }
 
   return (

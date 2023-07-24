@@ -93,14 +93,14 @@ const BuyOrRent = ({ product, onClose }) => {
   };
 
   return (
-    <Box w={"full"} mih={"100vh"}>
+    <Box w={"full"}>
       <Flex justify={"flex-end"} m={"lg"}>
         <ActionIcon onClick={onClose}>
           <GrClose />
         </ActionIcon>
       </Flex>
-      <Box mx={"30%"} my={"10%"}>
-        <Box mb={"10rem"}>
+      <Box mx={"30%"} mb={"2rem"}>
+        <Box mb={"2rem"}>
           <Title>{reshapedProduct.title}</Title>
           <Text>
             Categories:{" "}

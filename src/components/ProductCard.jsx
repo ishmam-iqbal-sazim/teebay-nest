@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Card, Flex, Text, Title } from "@mantine/core";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, deleteIcon }) => {
   console.log(product);
 
   const formattedTitle =
@@ -10,16 +10,10 @@ const ProductCard = ({ product }) => {
 
   return (
     <div>
-      <Card
-        key={product.id}
-        shadow="lg"
-        my={"xl"}
-        padding="lg"
-        withBorder
-        onClick={() => console.log("cardClick")}
-      >
+      <Card key={product.id} shadow="sm" my={"xl"} padding="lg" withBorder>
         <Flex justify={"space-between"} my={"20px"}>
           <Title>{formattedTitle}</Title>
+          {deleteIcon && deleteIcon}
         </Flex>
         <Text>
           Categories:{" "}
