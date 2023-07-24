@@ -10,16 +10,22 @@ import {
   Title,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { GrClose } from "react-icons/gr";
+import { formatDate } from "../../helper/formatDate";
 
-let user = JSON.parse(localStorage.getItem("currentUser"));
-
-const BuyOrRent = ({ product, onClose }) => {
-  let userId = user.id;
+const BuyOrRent = ({ product, onClose, userId }) => {
   const [rentOpened, { open: rentOpen, close: rentClose }] =
     useDisclosure(false);
   const [buyOpened, { open: buyOpen, close: buyClose }] = useDisclosure(false);
+
+  const rentalDates = useForm({
+    initialValues: {
+      rentalStart: "",
+      rentalEnd: "",
+    },
+  });
 
   const productCategoriesArray = product.categories.map((category) => {
     return category.name;
@@ -50,7 +56,9 @@ const BuyOrRent = ({ product, onClose }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ productId: product.id }),
+          body: JSON.stringify({
+            productId: product.id,
+          }),
         }
       );
 
@@ -68,6 +76,9 @@ const BuyOrRent = ({ product, onClose }) => {
 
   const handleRentConfirm = async () => {
     try {
+      const formattedRentalStart = formatDate(rentalDates.values.rentalStart);
+      const formattedRentalEnd = formatDate(rentalDates.values.rentalEnd);
+
       const response = await fetch(
         `http://localhost:3001/api/v1/rent/${userId}/${product.id}`,
         {
@@ -75,7 +86,11 @@ const BuyOrRent = ({ product, onClose }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ productId: product.id }),
+          body: JSON.stringify({
+            productId: product.id,
+            rentalStart: formattedRentalStart,
+            rentalEnd: formattedRentalEnd,
+          }),
         }
       );
 
@@ -134,12 +149,14 @@ const BuyOrRent = ({ product, onClose }) => {
               label="From"
               placeholder="dd/mm/yyyy"
               maw={200}
+              {...rentalDates.getInputProps("rentalStart")}
             />
             <DateInput
               valueFormat="DD/MM/YYYY"
               label="To"
               placeholder="dd/mm/yyyy"
               maw={200}
+              {...rentalDates.getInputProps("rentalEnd")}
             />
           </Group>
           <Group position="right" spacing={"md"} mt={"5rem"}>

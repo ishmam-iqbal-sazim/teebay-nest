@@ -1,6 +1,6 @@
 import { Container, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BuyOrRent from "../components/productActions/BuyOrRent";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
@@ -9,6 +9,16 @@ import Loading from "../components/Loading";
 const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(false);
+
+  const [userId, setUserId] = useState();
+
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+
+  console.log(user);
+
+  useEffect(() => {
+    setUserId(user.id);
+  }, [user.id]);
 
   const queryResults = useQuery(
     ["allProducts"],
@@ -40,7 +50,13 @@ const AllProducts = () => {
   };
 
   if (isProductClicked) {
-    return <BuyOrRent product={currentProduct} onClose={handleCloseBuyRent} />;
+    return (
+      <BuyOrRent
+        product={currentProduct}
+        onClose={handleCloseBuyRent}
+        userId={userId}
+      />
+    );
   }
 
   return (
@@ -49,7 +65,7 @@ const AllProducts = () => {
         <Title ta="center" order={1} fw={400} mb={"60px"}>
           ALL PRODUCTS{" "}
         </Title>
-        {!products ? (
+        {products.length === 0 ? (
           <NoProductsToDisplay text={"No products to display"} />
         ) : (
           products.map((product) => {
@@ -57,6 +73,9 @@ const AllProducts = () => {
               <Container
                 size={"lg"}
                 key={product.id}
+                sx={{
+                  "&:hover": {},
+                }}
                 onClick={() => handleProductCardClick(product)}
               >
                 <ProductCard product={product} />

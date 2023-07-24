@@ -1,30 +1,35 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Container, Group, Modal, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddProduct from "../components/productActions/AddProduct";
 import EditProduct from "../components/productActions/EditProduct";
 import Loading from "../components/Loading";
 import ProductDelete from "../components/DeleteIcon";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
-import NotLoggedIn from "../components/NotLoggedIn";
 import { useDisclosure } from "@mantine/hooks";
-
-let user = JSON.parse(localStorage.getItem("currentUser"));
+import NotLoggedIn from "../components/NotLoggedIn";
 
 const MyProducts = () => {
-  let userId = user?.id;
-
   const [isAddProductClicked, setIsAddProductClicked] = useState(false);
   const [openEditProduct, setOpenEditProduct] = useState(false);
   const [productToEdit, setProductToEdit] = useState({});
   const [opened, { open, close }] = useDisclosure(false);
 
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser"))
+  );
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("currentUser")));
+  }, []);
+
+  let userId = user?.id;
+
   const queryResults = useQuery(
-    [`userProducts`],
+    [`user${userId}Products`],
     async () => {
-      if (!userId) return [];
       const apiRes = await fetch(
         `http://localhost:3001/api/v1/${userId}/products`
       );
@@ -33,15 +38,10 @@ const MyProducts = () => {
       }
       return apiRes.json();
     },
-    { staleTime: Infinity },
-    { enabled: !!userId }
+    { staleTime: Infinity }
   );
 
   const products = queryResults.data;
-
-  if (!userId) {
-    return <NotLoggedIn />;
-  }
 
   const handleAddProductClick = () => {
     setIsAddProductClicked(true);
@@ -63,12 +63,16 @@ const MyProducts = () => {
     queryResults.refetch();
   };
 
+  if (!userId) {
+    return <NotLoggedIn />;
+  }
+
   if (queryResults.isLoading) {
     return <Loading />;
   }
 
   if (isAddProductClicked) {
-    return <AddProduct onClose={handleAddProductClose} />;
+    return <AddProduct onClose={handleAddProductClose} userId={user.id} />;
   }
 
   if (openEditProduct) {
@@ -109,7 +113,10 @@ const MyProducts = () => {
         ) : (
           products.map((product) => {
             return (
-              <Box key={product.id}>
+              <Box
+                key={product.id}
+                styles={{ "&:hover": { cursor: "pointer" } }}
+              >
                 <Container
                   size={"xl"}
                   onClick={() => handleProductCardClick(product)}

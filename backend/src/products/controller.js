@@ -261,6 +261,7 @@ const rentProduct = async (req, res) => {
   const customerId = parseInt(req.params.userId, 10);
   const productId = parseInt(req.params.productId, 10);
   const { rent_duration } = req.body;
+  const { rentalStart, rentalEnd } = req.body;
 
   try {
     const product = await prisma.product.findUnique({
@@ -328,7 +329,6 @@ const rentProduct = async (req, res) => {
 
     // Update product ownership (owner remains the same)
     if (rent_duration) {
-      // rent_duration is optional
       await prisma.product.update({
         where: { id: productId },
         data: {
@@ -344,6 +344,14 @@ const rentProduct = async (req, res) => {
         },
       });
     }
+
+    await prisma.transactions.updateMany({
+      where: { productId: productId },
+      data: {
+        rentalStart,
+        rentalEnd,
+      },
+    });
 
     res.json({ transaction, lendTransaction });
   } catch (error) {
@@ -406,6 +414,16 @@ const getRentedProducts = async (req, res) => {
         ownerId: true,
         owner: true,
         categories: true,
+        transactions: {
+          where: {
+            userId: customerId,
+            status: "RENTED",
+          },
+          select: {
+            rentalStart: true,
+            rentalEnd: true,
+          },
+        },
       },
     });
 
@@ -470,6 +488,16 @@ const getLentProducts = async (req, res) => {
         ownerId: true,
         owner: true,
         categories: true,
+        transactions: {
+          where: {
+            userId: ownerId,
+            status: "LENT",
+          },
+          select: {
+            rentalStart: true,
+            rentalEnd: true,
+          },
+        },
       },
     });
 

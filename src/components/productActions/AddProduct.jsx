@@ -15,11 +15,8 @@ import {
 import { useForm } from "@mantine/form";
 import { GrClose } from "react-icons/gr";
 
-let user = JSON.parse(localStorage.getItem("currentUser"));
-
 // eslint-disable-next-line react/prop-types
-function AddProduct({ onClose }) {
-  let userId = user.id;
+function AddProduct({ onClose, userId }) {
   const [active, setActive] = useState(0);
 
   const categories = [

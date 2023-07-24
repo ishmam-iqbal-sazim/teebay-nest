@@ -1,10 +1,9 @@
+/* eslint-disable react/prop-types */
 import { Button, Grid, Group, Modal, Paper, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link, useNavigate } from "react-router-dom";
 
-let user = JSON.parse(localStorage.getItem("currentUser"));
-
-const Header = () => {
+const Header = ({ user }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const navigate = useNavigate();

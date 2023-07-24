@@ -49,11 +49,13 @@ enum TransactionStatus {
 }
 
 model Transactions {
-  id        Int               @id @default(autoincrement())
-  status    TransactionStatus
-  createdAt DateTime          @default(now())
-  product   Product           @relation(fields: [productId], references: [id])
-  productId Int
-  user      User?             @relation("UserTransactions", fields: [userId], references: [id])
-  userId    Int?
+  id          Int               @id @default(autoincrement())
+  status      TransactionStatus
+  createdAt   DateTime          @default(now())
+  product     Product           @relation(fields: [productId], references: [id])
+  productId   Int
+  user        User?             @relation("UserTransactions", fields: [userId], references: [id])
+  userId      Int?
+  rentalStart String?           @default(dbgenerated())
+  rentalEnd   String?           @default(dbgenerated())
 }

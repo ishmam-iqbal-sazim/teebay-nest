@@ -45,15 +45,10 @@ const MyTransactions = () => {
           <LentProducts userId={userId} />
         </Tabs.Panel>
       </Tabs>
-      <Group position="center" spacing={"xl"}>
+      <Group position="center" spacing={"xl"} mb={100}>
         <Link to={`/my-products`}>
           <Button variant="subtle" color="violet" uppercase>
-            My Products
-          </Button>
-        </Link>
-        <Link to={`/all-products`}>
-          <Button variant="subtle" color="violet" uppercase>
-            All Products
+            Go back{" "}
           </Button>
         </Link>
       </Group>

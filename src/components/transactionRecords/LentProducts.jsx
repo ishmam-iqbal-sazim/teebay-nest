@@ -3,6 +3,7 @@ import { Container } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../ProductCard";
 import Loading from "../Loading";
+import NoProductsToDisplay from "../NoProductsToDisplay";
 
 const LentProducts = ({ userId }) => {
   const queryResults = useQuery(
@@ -25,9 +26,17 @@ const LentProducts = ({ userId }) => {
 
   return (
     <Container my={"xl"} py={"xl"} size={"lg"}>
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+      {products.length == 0 ? (
+        <NoProductsToDisplay text={"No lent products"} />
+      ) : (
+        products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            rentalPeriod={product.transactions[0]}
+          />
+        ))
+      )}
     </Container>
   );
 };
