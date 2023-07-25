@@ -33,3 +33,6 @@ Preliminary implementation of rentProduct functionality. Now moving to fe to see
 Backend funtionality more or less working with one exception. How rental period will be handled? I was planning on separating the transaction table into two, one for buy/sell and one for rented/lent. I am not sure how to handle this, I will keep it in one table for now for simplicity.
 
 My frequency of git commits greatly decreased and this is due to the fact that its hard to exacly distinguish if a task is completed, you start doing one thing then in the process of debugging are completely changing another thing. I will try to be a bit more organized and more frequent in my commits.
+
+Struggling with authentication. Currently I am doing something weird with localstorage and I am unsure if its the best way. ChatGPT recommended use of JSON Web tokens and react router so tomorrow I will work on that.
+Also need to streamline the api endpoints but they are working fine thus far so I'd rather not create problems ahead of experiencing them.

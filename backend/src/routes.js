@@ -13,6 +13,8 @@ import {
   getRentedProducts,
   getLentProducts,
 } from "./products/controller.js";
+import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -22,25 +24,14 @@ router.post("/register", async (req, res) => {
   const { email, password, address, phone_number, first_name, last_name } =
     req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required." });
-  }
-
-  if (!first_name) {
-    return res.status(401).json({ error: "First name is required" });
-  }
-
   try {
-    // Does user already exist?
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      return res
-        .status(409)
-        .json({ error: "User with this email already exists" });
+      return res.status(409).json({ error: "Email already exists" });
     }
 
-    // Save user data
+    // Save new user data
     const user = await prisma.user.create({
       data: {
         email,
@@ -52,7 +43,6 @@ router.post("/register", async (req, res) => {
       },
     });
 
-    // Respond with newly created user
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: "Error registering user" });
@@ -64,9 +54,9 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find user
     const user = await prisma.user.findUnique({ where: { email } });
 
+    // Handle authentication errors
     if (!user) {
       return res.status(404).json({ error: "Email not registered" });
     }
@@ -75,8 +65,13 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
 
-    // Respond with the user data
-    res.json(user);
+    // generate secretKey
+    const secretKey = nanoid(32);
+
+    // generate token
+    const token = jwt.sign({ userId: user.id }, secretKey);
+
+    res.json({ user, token });
   } catch (error) {
     res.status(500).json({ error: "Error logging in" });
   }

@@ -28,14 +28,20 @@ const Login = () => {
         "http://localhost:3001/api/v1/login",
         form.values
       );
-      // updateUser(response.data);
-      // Save user data to local storage
+
+      // Save user data for later use
       localStorage.setItem("currentUser", JSON.stringify(response.data));
 
+      const authToken = response.data.token;
+      localStorage.setItem("authToken", authToken);
+
+      // Reload to ensure authentiaiton token is immediately available
+      window.location.reload;
+
       console.log("User logged in:", response.data);
-      if (response.data.id) {
-        navigate("/my-products");
-      }
+      // if (response.data.id) {
+      //   navigate("/my-products");
+      // }
     } catch (error) {
       console.error("Error logging in:", error.message);
     }

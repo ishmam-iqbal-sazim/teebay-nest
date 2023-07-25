@@ -10,6 +10,8 @@ import {
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const form = useForm({
@@ -17,7 +19,7 @@ const Signup = () => {
     initialValues: {
       email: "",
       password: "",
-      confirmPassword: "",
+      confirm_password: "",
       address: "",
       phone_number: "",
       first_name: "",
@@ -25,31 +27,38 @@ const Signup = () => {
     },
     validate: {
       first_name: (value) =>
-        value.length < 2 ? "Name must have at least 2 letters" : null,
+        (value.length === 0) | (value.length < 2)
+          ? "Name must have at least 2 letters"
+          : null,
       last_name: (value) =>
         value.length < 2 ? "Name must have at least 2 letters" : null,
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      confirmPassword: (value, values) =>
+      password: (value) =>
+        value.length < 8 ? "Password must have at least 8 characters" : null,
+      confirm_password: (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
     },
   });
 
   const navigate = useNavigate();
-
-  const handleSubmit = async () => {
+  const registrationHandler = async (values) => {
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/register",
-        form.values
+        values
       );
+      alert("Successfully signed up! Login to continue.");
       if (response.data.id) {
-        alert("Successfully signed up! Login to continue.");
         navigate("/");
       }
     } catch (error) {
-      console.error("Error registering user:", error.message);
+      console.error("Error registering user:", error.response.data.error);
+      errorPopup(error.response.data.error);
     }
   };
+
+  // Progress messages to user
+  const errorPopup = (message) => toast.error(message);
 
   return (
     <Flex
@@ -68,7 +77,7 @@ const Signup = () => {
           border: "1px rgba(118, 117, 117, 0.5) solid",
         }}
       >
-        <form>
+        <form onSubmit={form.onSubmit((values) => registrationHandler(values))}>
           <TextInput
             placeholder="First Name"
             {...form.getInputProps("first_name")}
@@ -101,10 +110,10 @@ const Signup = () => {
           <PasswordInput
             mt="md"
             placeholder="Confirm password"
-            {...form.getInputProps("confirmPassword")}
+            {...form.getInputProps("confirm_password")}
           />
           <Center>
-            <Button mt="xl" type="button" onClick={handleSubmit}>
+            <Button mt="xl" type="submit">
               Sign Up
             </Button>
           </Center>
@@ -115,6 +124,7 @@ const Signup = () => {
           </Center>
         </form>
       </Box>
+      <ToastContainer position="top-center" autoClose={false} />
     </Flex>
   );
 };
