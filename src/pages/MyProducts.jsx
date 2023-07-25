@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Button, Container, Group, Modal, Title } from "@mantine/core";
+import { Button, Container, Grid, Group, Modal, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import AddProduct from "../components/productActions/AddProduct";
@@ -116,20 +116,21 @@ const MyProducts = () => {
   };
 
   return (
-    <div>
-      <Container my="xl" py={"xl"} size={"xl"}>
-        <Title ta="center" order={1} fw={400} mb={"60px"}>
-          MY PRODUCTS{" "}
-        </Title>
+    <Container my="xl" py={"lg"}>
+      <Grid>
+        <Grid.Col>
+          <Title ta="center" order={1} fw={400} mb={"60px"}>
+            MY PRODUCTS{" "}
+          </Title>
+        </Grid.Col>
         {products.length == 0 ? (
-          <NoProductsToDisplay text={"You have no products"} />
+          <Grid.Col>
+            <NoProductsToDisplay text={"You have no products"} />
+          </Grid.Col>
         ) : (
           products.map((product) => {
             return (
-              <Box
-                key={product.id}
-                styles={{ "&:hover": { cursor: "pointer" } }}
-              >
+              <Grid.Col key={product.id}>
                 <Container
                   size={"xl"}
                   onClick={() => handleProductCardClick(product)}
@@ -158,22 +159,22 @@ const MyProducts = () => {
                     </Button>
                   </Group>
                 </Modal>
-              </Box>
+              </Grid.Col>
             );
           })
         )}
-        <Group position="right">
-          <Button
-            color="violet"
-            uppercase
-            onClick={handleAddProductClick}
-            m={"lg"}
-          >
-            Add Product
-          </Button>
-        </Group>
-      </Container>
-    </div>
+      </Grid>
+      <Group position="right" mt={20}>
+        <Button
+          color="violet"
+          onClick={handleAddProductClick}
+          mx={"xl"}
+          size="md"
+        >
+          Add Product
+        </Button>
+      </Group>
+    </Container>
   );
 };
 

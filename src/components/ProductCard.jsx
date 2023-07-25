@@ -8,12 +8,22 @@ const ProductCard = ({ product, deleteIcon, rentalPeriod }) => {
 
   return (
     <div>
-      <Card key={product.id} shadow="sm" my={"xl"} padding="xl" withBorder>
+      <Card
+        key={product.id}
+        sx={{
+          border: "2px rgba(162, 160, 160, 0.412) solid",
+        }}
+        p={30}
+        fw={600}
+        my={"xl"}
+        radius={"sm"}
+        padding="xl"
+      >
         <Flex justify={"space-between"} my={"20px"}>
-          <Title>{formattedTitle}</Title>
+          <Title fw={500}>{formattedTitle}</Title>
           {deleteIcon && deleteIcon}
         </Flex>
-        <Text>
+        <Text my={5} c={"dimmed"}>
           Categories:{" "}
           {product.categories
             .map((category) => {
@@ -24,17 +34,17 @@ const ProductCard = ({ product, deleteIcon, rentalPeriod }) => {
             })
             .join(", ")}
         </Text>
-        <Text>
+        <Text my={5} c={"dimmed"}>
           {product.purchase_price} | Rent: $
           {`${product.rent_price} ${product.rent_duration}`}
         </Text>
-        <Text>{product.description}</Text>
+        <Text my={10}>{product.description}</Text>
         {rentalPeriod && (
           <Text>{`Rental Period: ${rentalPeriod.rentalStart} to ${rentalPeriod.rentalEnd}`}</Text>
         )}
         <Flex justify={"space-between"}>
-          <Text>Date posted: 21 July 2023</Text>
-          <Text>134141 views</Text>
+          <Text c={"dimmed"}>Date posted: 21 July 2023</Text>
+          <Text c={"dimmed"}>134141 views</Text>
         </Flex>
       </Card>
     </div>

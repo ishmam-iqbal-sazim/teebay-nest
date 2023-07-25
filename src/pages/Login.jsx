@@ -6,6 +6,7 @@ import {
   Center,
   Text,
   Flex,
+  Grid,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +18,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const form = useForm({
-    validateInputOnChange: true,
     initialValues: {
       email: "",
       password: "",
@@ -28,6 +28,7 @@ const Login = () => {
   });
 
   const loginHandler = async (values) => {
+    console.log(values);
     try {
       const response = await fetch("http://localhost:3001/api/v1/login", {
         method: "POST",
@@ -38,6 +39,8 @@ const Login = () => {
       });
       if (response.ok) {
         const data = await response.json();
+
+        console.log(data);
 
         const authToken = data.token;
 
@@ -70,32 +73,48 @@ const Login = () => {
     >
       <Text fz={"xl"}>SIGN IN</Text>
       <Box
-        maw={520}
-        mx="auto"
-        mt="lg"
-        p={"50px"}
+        maw={450}
+        m="lg"
+        p="6rem"
         sx={{
-          border: "1px rgba(118, 117, 117, 0.5) solid",
+          border: "2px rgba(162, 160, 160, 0.412) solid",
         }}
       >
         <form onSubmit={form.onSubmit((values) => loginHandler(values))}>
-          <TextInput placeholder="Email" {...form.getInputProps("email")} />
-          <PasswordInput
-            mt="md"
-            placeholder="Password"
-            {...form.getInputProps("password")}
-          />
-          <Center>
-            <Button mt="xl" type="submit">
-              Login
-            </Button>
-          </Center>
+          <Grid gutter="xl">
+            <Grid.Col>
+              <TextInput placeholder="Email" {...form.getInputProps("email")} />
+            </Grid.Col>
+            <Grid.Col>
+              <PasswordInput
+                placeholder="Password"
+                {...form.getInputProps("password")}
+              />
+            </Grid.Col>
+            <Grid.Col></Grid.Col>
+            <Grid.Col>
+              <Center>
+                <Button
+                  size="sm"
+                  type="submit"
+                  uppercase
+                  color="violet"
+                  radius={"sm"}
+                >
+                  Login
+                </Button>
+              </Center>
+            </Grid.Col>
+            <Grid.Col></Grid.Col>
+            <Grid.Col>
+              <Center>
+                <Text>
+                  {`Don't have an account?`} <Link to="/register">Signup</Link>
+                </Text>
+              </Center>
+            </Grid.Col>
+          </Grid>
         </form>
-        <Center>
-          <Text mt="lg">
-            {`Don't have an account?`} <Link to="/register">Sign up</Link>
-          </Text>
-        </Center>
       </Box>
       <ToastContainer position="top-center" autoClose={false} />
     </Flex>

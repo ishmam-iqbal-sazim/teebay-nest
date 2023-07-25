@@ -6,6 +6,7 @@ import {
   Center,
   Text,
   Flex,
+  Grid,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
@@ -76,59 +77,87 @@ const Signup = () => {
     >
       <Text fz={"xl"}>SIGN UP</Text>
       <Box
-        maw={520}
-        mx="auto"
-        mt="lg"
-        p={"50px"}
+        maw={750}
+        m="lg"
+        p="6rem"
         sx={{
-          border: "1px rgba(118, 117, 117, 0.5) solid",
+          border: "2px rgba(162, 160, 160, 0.412) solid",
         }}
       >
         <form onSubmit={form.onSubmit((values) => registrationHandler(values))}>
-          <TextInput
-            placeholder="First Name"
-            {...form.getInputProps("first_name")}
-          />
-          <TextInput
-            mt="md"
-            placeholder="Last Name"
-            {...form.getInputProps("last_name")}
-          />
-          <TextInput
-            mt="md"
-            placeholder="Address"
-            {...form.getInputProps("address")}
-          />
-          <TextInput
-            mt="md"
-            placeholder="Email"
-            {...form.getInputProps("email")}
-          />
-          <TextInput
-            mt="md"
-            placeholder="Phone Number"
-            {...form.getInputProps("phone_number")}
-          />
-          <PasswordInput
-            mt="md"
-            placeholder="Password"
-            {...form.getInputProps("password")}
-          />
-          <PasswordInput
-            mt="md"
-            placeholder="Confirm password"
-            {...form.getInputProps("confirm_password")}
-          />
-          <Center>
-            <Button mt="xl" type="submit">
-              Sign Up
-            </Button>
-          </Center>
-          <Center mt="lg">
-            <Text>
-              {`Already have an account? `} <Link to="/">Login</Link>
-            </Text>
-          </Center>
+          <Grid gutter="xl">
+            <Grid.Col span={6}>
+              <TextInput
+                size="md"
+                placeholder="First Name"
+                {...form.getInputProps("first_name")}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <TextInput
+                size="md"
+                placeholder="Last Name"
+                {...form.getInputProps("last_name")}
+              />
+            </Grid.Col>
+            <Grid.Col>
+              <TextInput
+                size="md"
+                placeholder="Address"
+                {...form.getInputProps("address")}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <TextInput
+                size="md"
+                placeholder="Email"
+                {...form.getInputProps("email")}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <TextInput
+                size="md"
+                placeholder="Phone Number"
+                {...form.getInputProps("phone_number")}
+              />
+            </Grid.Col>
+            <Grid.Col>
+              <PasswordInput
+                size="md"
+                placeholder="Password"
+                {...form.getInputProps("password")}
+              />
+            </Grid.Col>
+            <Grid.Col>
+              <PasswordInput
+                size="md"
+                placeholder="Confirm password"
+                {...form.getInputProps("confirm_password")}
+              />
+            </Grid.Col>
+            <Grid.Col></Grid.Col>
+            <Grid.Col>
+              <Center>
+                <Button
+                  size="sm"
+                  type="submit"
+                  uppercase
+                  color="violet"
+                  radius={"sm"}
+                >
+                  Register
+                </Button>
+              </Center>
+            </Grid.Col>
+            <Grid.Col></Grid.Col>
+            <Grid.Col>
+              <Center>
+                <Text>
+                  {`Already have an account? `} <Link to="/">Sign In</Link>
+                </Text>
+              </Center>
+            </Grid.Col>
+          </Grid>
         </form>
       </Box>
       <ToastContainer position="top-center" autoClose={false} />

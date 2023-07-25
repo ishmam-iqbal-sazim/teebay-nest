@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
 import {
-  ActionIcon,
-  Box,
   Button,
   Center,
-  Flex,
+  Grid,
+  Group,
   MultiSelect,
   NumberInput,
   Select,
   TextInput,
+  Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { GrClose } from "react-icons/gr";
 
 const EditProduct = ({ product, onClose, categories }) => {
   const userId = product.ownerId;
@@ -62,6 +61,7 @@ const EditProduct = ({ product, onClose, categories }) => {
         return;
       }
 
+      alert("Product updated successfully!");
       onClose();
     } catch (error) {
       console.error("Error updating product data:", error);
@@ -69,80 +69,79 @@ const EditProduct = ({ product, onClose, categories }) => {
   };
 
   return (
-    <Flex
-      justify="center"
-      align="center"
-      direction="column"
-      style={{ minHeight: "100vh" }}
-    >
-      <Box
-        maw={520}
-        mx="auto"
-        mt="lg"
-        px={"50px"}
-        py={"20px"}
-        sx={{
-          border: "1px rgba(118, 117, 117, 0.5) solid",
-        }}
-      >
-        <form onSubmit={form.onSubmit((values) => handleConfirmEdit(values))}>
-          <Flex justify={"flex-end"} m={"lg"}>
-            <ActionIcon onClick={onClose}>
-              <GrClose />
-            </ActionIcon>
-          </Flex>
-          <Box>
+    <form onSubmit={form.onSubmit((values) => handleConfirmEdit(values))}>
+      <Center mt={"xl"} pt={"xl"}>
+        <Grid maw={800} grow gutter="xl" mt={"xl"}>
+          <Grid.Col span={12}>
             <TextInput
-              mt={"md"}
-              label="Select a title for your product"
+              size="md"
+              label="Title"
               {...form.getInputProps("title")}
             />
-          </Box>
-          <Box>
+          </Grid.Col>
+          <Grid.Col span="content">
             <MultiSelect
+              size="md"
               data={categories}
-              label="Select Categories"
+              label="Categories"
               placeholder="Select a category"
               defaultValue={form.values.categories}
               {...form.getInputProps("category")}
             />
-          </Box>
-          <Box>
-            <TextInput
-              mt={"md"}
-              label="Select Description"
+          </Grid.Col>
+          <Grid.Col span={2} />
+
+          <Grid.Col>
+            <Textarea
+              size="md"
+              label="Description"
               {...form.getInputProps("description")}
             />
-          </Box>
-          <NumberInput
-            mt={"md"}
-            label="Select Price"
-            {...form.getInputProps("purchase_price")}
-          />
-          <Box>
-            <Flex justify={"space-between"} align={"center"} mt={"lg"}>
-              <NumberInput label="Rent" {...form.getInputProps("rent_price")} />
-              <Select
-                placeholder="Select option"
-                defaultValue={form.values.rent_duration}
-                data={[
-                  { value: "daily", label: "Daily" },
-                  { value: "hourly", label: "Hourly" },
-                  { value: "weekly", label: "Weekly" },
-                  { value: "monthly", label: "Monthly" },
-                ]}
-                {...form.getInputProps("rent_duration")}
+          </Grid.Col>
+          <Grid.Col></Grid.Col>
+          <Grid.Col>
+            <Group position="left" spacing={"xl"}>
+              <NumberInput
+                size="md"
+                label="Price"
+                {...form.getInputProps("purchase_price")}
               />
-            </Flex>
-          </Box>
-          <Center>
-            <Button mt="xl" type="submit">
-              Edit Product
-            </Button>
-          </Center>
-        </form>
-      </Box>
-    </Flex>
+              <Group position="right" spacing={"md"}>
+                <NumberInput
+                  size="md"
+                  label="Rent"
+                  {...form.getInputProps("rent_price")}
+                />
+                <Select
+                  mt={"lg"}
+                  placeholder="Select option"
+                  defaultValue={form.values.rent_duration}
+                  data={[
+                    { value: "daily", label: "Daily" },
+                    { value: "hourly", label: "Hourly" },
+                    { value: "weekly", label: "Weekly" },
+                    { value: "monthly", label: "Monthly" },
+                  ]}
+                  {...form.getInputProps("rent_duration")}
+                />
+              </Group>
+            </Group>
+          </Grid.Col>
+          <Grid.Col></Grid.Col>
+          <Grid.Col></Grid.Col>
+          <Grid.Col>
+            <Group position="right">
+              <Button size="md" color="red" onClick={onClose}>
+                Go back
+              </Button>
+              <Button size="md" type="submit" color="violet">
+                Edit Product
+              </Button>
+            </Group>
+          </Grid.Col>
+        </Grid>
+      </Center>
+    </form>
   );
 };
 

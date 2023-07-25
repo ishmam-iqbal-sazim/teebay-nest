@@ -5,13 +5,17 @@ import {
   Button,
   TextInput,
   Title,
-  Container,
   Flex,
   NumberInput,
   MultiSelect,
   Select,
   Text,
   ActionIcon,
+  Textarea,
+  Grid,
+  Center,
+  Group,
+  Container,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { GrClose } from "react-icons/gr";
@@ -89,108 +93,137 @@ function AddProduct({ onClose, userId, categories }) {
   };
 
   return (
-    <Flex justify="center" align="center" style={{ minHeight: "100vh" }}>
-      <Container>
-        <Flex justify={"flex-end"} pb={"xl"} mb={"xl"}>
-          <ActionIcon onClick={onClose}>
-            <GrClose />
-          </ActionIcon>
-        </Flex>
-        <Stepper
-          active={active}
-          onStepClick={setActive}
-          breakpoint="sm"
-          w={"80vh"}
-          h={"30vh"}
-        >
-          <Stepper.Step>
-            <TextInput
-              label="Select a title for your product"
-              {...form.getInputProps("title")}
-            />
-          </Stepper.Step>
+    <Container mb={70}>
+      <Grid h={"85vh"} mah={"85vh"}>
+        <Grid.Col>
+          <Flex justify={"flex-end"} h={"100px"} mt={"2rem"}>
+            <ActionIcon onClick={onClose}>
+              <GrClose />
+            </ActionIcon>
+          </Flex>
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Center>
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              breakpoint="sm"
+              w={"80vh"}
+            >
+              <Stepper.Step>
+                <Center my={30}>
+                  <Title fw={700}>Select a title for your product</Title>
+                </Center>
+                <TextInput {...form.getInputProps("title")} size="xl" />
+              </Stepper.Step>
 
-          <Stepper.Step>
-            <MultiSelect
-              data={categories}
-              label="Select Categories"
-              placeholder="Select a category"
-              {...form.getInputProps("categories")}
-            />
-          </Stepper.Step>
+              <Stepper.Step>
+                <Center my={30}>
+                  <Title fw={700}>Select Categories</Title>
+                </Center>
+                <MultiSelect
+                  size="md"
+                  data={categories}
+                  placeholder="Select a category"
+                  {...form.getInputProps("categories")}
+                />
+              </Stepper.Step>
 
-          <Stepper.Step>
-            <TextInput
-              label="Select Description"
-              {...form.getInputProps("description")}
-            />
-          </Stepper.Step>
+              <Stepper.Step>
+                <Center my={30}>
+                  <Title fw={700}>Select Description</Title>
+                </Center>
+                <Textarea {...form.getInputProps("description")} size="xl" />
+              </Stepper.Step>
 
-          <Stepper.Step>
-            <NumberInput
-              label="Select Price"
-              placeholder="Purchase price"
-              {...form.getInputProps("purchase_price")}
-            />
-            <NumberInput
-              label="Rent"
-              placeholder="$40"
-              {...form.getInputProps("rent_price")}
-            />
-            <Select
-              placeholder="Select option"
-              data={[
-                { value: "daily", label: "Daily" },
-                { value: "hourly", label: "Hourly" },
-                { value: "weekly", label: "Weekly" },
-                { value: "monthly", label: "Monthly" },
-              ]}
-              {...form.getInputProps("rent_duration")}
-            />
-          </Stepper.Step>
+              <Stepper.Step>
+                <Center my={30}>
+                  <Title fw={700}>Select Price</Title>
+                </Center>
+                <Center>
+                  <NumberInput
+                    maw={300}
+                    size="md"
+                    placeholder="Purchase price"
+                    {...form.getInputProps("purchase_price")}
+                  />
+                </Center>
+                <Group position="center" mt={50}>
+                  <NumberInput
+                    label="Rent"
+                    placeholder="$40"
+                    {...form.getInputProps("rent_price")}
+                  />
+                  <Select
+                    mt={20}
+                    placeholder="Select option"
+                    data={[
+                      { value: "daily", label: "Daily" },
+                      { value: "hourly", label: "Hourly" },
+                      { value: "weekly", label: "Weekly" },
+                      { value: "monthly", label: "Monthly" },
+                    ]}
+                    {...form.getInputProps("rent_duration")}
+                  />
+                </Group>
+              </Stepper.Step>
 
-          <Stepper.Completed>
-            <Title>Summary</Title>
-            <Text>Title: {form.values.title}</Text>
-            <Text>
-              Categories:{" "}
-              {form.values.categories
-                .map((category) => {
-                  const categoryName = category.toLowerCase();
-                  return (
-                    categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
-                  );
-                })
-                .join(", ")}
-            </Text>
-            <Text>Description: {form.values.description}</Text>
-            <Text>
-              Price: {form.values.purchase_price}, To rent:{" "}
-              {form.values.rent_price}
-            </Text>
-          </Stepper.Completed>
-        </Stepper>
-
-        <Flex justify={"space-between"} mt="100px">
-          {active !== 0 && (
-            <Button variant="light" color="violet" onClick={prevStep}>
-              Back
-            </Button>
-          )}
-          {active !== 4 && (
-            <Button color="violet" onClick={nextStep}>
-              Next step
-            </Button>
-          )}
-          {active === 4 && (
-            <Button color="violet" onClick={handleSubmit}>
-              Submit
-            </Button>
-          )}
-        </Flex>
-      </Container>
+              <Stepper.Completed>
+                <Grid my={50}>
+                  <Grid.Col>
+                    <Title>Summary</Title>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <Text>Title: {form.values.title}</Text>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <Text>
+                      Categories:{" "}
+                      {form.values.categories
+                        .map((category) => {
+                          const categoryName = category.toLowerCase();
+                          return (
+                            categoryName.charAt(0).toUpperCase() +
+                            categoryName.slice(1)
+                          );
+                        })
+                        .join(", ")}
+                    </Text>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <Text>Description: {form.values.description}</Text>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <Text>
+                      Price: {form.values.purchase_price}, To rent:{" "}
+                      {form.values.rent_price}
+                    </Text>
+                  </Grid.Col>
+                </Grid>
+              </Stepper.Completed>
+            </Stepper>
+          </Center>
+        </Grid.Col>
+      </Grid>
+      <Group position="apart">
+        {active !== 0 && (
+          <Button variant="light" color="violet" onClick={prevStep}>
+            Back
+          </Button>
+        )}
+        {active !== 4 && (
+          <Button color="violet" onClick={nextStep}>
+            Next step
+          </Button>
+        )}
+        {active === 4 && (
+          <Button color="violet" onClick={handleSubmit}>
+            Submit
+          </Button>
+        )}
+      </Group>
       <ToastContainer position="top-center" autoClose={1500} />
-    </Flex>
+    </Container>
   );
 }
 

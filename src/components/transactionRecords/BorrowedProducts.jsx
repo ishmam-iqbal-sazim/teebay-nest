@@ -18,6 +18,7 @@ const BorrowedProducts = ({ userId }) => {
   if (queryResults.isLoading) {
     return <Loading />;
   }
+  console.log(products[0]);
 
   return (
     <Container my={"xl"} py={"xl"} size={"lg"}>

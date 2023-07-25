@@ -7,7 +7,6 @@ const ProductDelete = ({ onDelete, id }) => {
     <ActionIcon
       size={"lg"}
       variant="transparent"
-      mx={"10px"}
       onClick={(event) => {
         event.stopPropagation();
         onDelete(id);

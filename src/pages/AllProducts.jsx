@@ -1,4 +1,4 @@
-import { Container, Title } from "@mantine/core";
+import { Container, Grid, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import BuyOrRent from "../components/productActions/BuyOrRent";
@@ -8,26 +8,31 @@ import Loading from "../components/Loading";
 import fetchAllProducts from "../fetchData/fetchAllProducts";
 
 const AllProducts = () => {
+  // TODO
+  // Implement more details and less details in Product Description and improve styling of all product cards and summary
+  //TODO
   const [isProductClicked, setIsProductClicked] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(false);
 
-  const [userId, setUserId] = useState();
-
-  let user = JSON.parse(localStorage.getItem("currentUser"));
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    setUserId(user.id);
-  }, [user.id]);
+    setUser(JSON.parse(localStorage.getItem("currentUser")));
+  }, []);
+
+  let userId = user?.id;
 
   const queryResults = useQuery(
-    ["allProducts"],
-    () => fetchAllProducts(user.id),
+    [`allProducts${userId}`],
+    () => fetchAllProducts(userId),
     {
       staleTime: Infinity,
     }
   );
 
   const products = queryResults.data;
+
+  console.log(products);
 
   if (queryResults.isLoading) {
     return <Loading />;
@@ -55,31 +60,33 @@ const AllProducts = () => {
   }
 
   return (
-    <div>
-      <Container my={"xl"} py={"xl"} size={"lg"}>
-        <Title ta="center" order={1} fw={400} mb={"60px"}>
-          ALL PRODUCTS{" "}
-        </Title>
+    <Container my="xl" py={"lg"}>
+      <Grid>
+        <Grid.Col>
+          <Title ta="center" order={1} fw={400} mb={"60px"}>
+            ALL PRODUCTS{" "}
+          </Title>
+        </Grid.Col>
         {products.length === 0 ? (
-          <NoProductsToDisplay text={"No products to display"} />
+          <Grid.Col>
+            <NoProductsToDisplay text={"No products to display"} />
+          </Grid.Col>
         ) : (
           products.map((product) => {
             return (
-              <Container
-                size={"lg"}
-                key={product.id}
-                sx={{
-                  "&:hover": {},
-                }}
-                onClick={() => handleProductCardClick(product)}
-              >
-                <ProductCard product={product} />
-              </Container>
+              <Grid.Col key={product.id}>
+                <Container
+                  size={"xl"}
+                  onClick={() => handleProductCardClick(product)}
+                >
+                  <ProductCard product={product} />
+                </Container>
+              </Grid.Col>
             );
           })
         )}
-      </Container>
-    </div>
+      </Grid>
+    </Container>
   );
 };
 
