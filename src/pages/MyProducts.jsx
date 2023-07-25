@@ -94,8 +94,8 @@ const MyProducts = () => {
         console.error("Error deleting product");
         return;
       }
-      // refetch products
       close();
+      // refetch products
       queryResults.refetch();
     } catch (error) {
       console.error("Error deleting product:", error);

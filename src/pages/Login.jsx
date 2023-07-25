@@ -8,44 +8,58 @@ import {
   Flex,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // eslint-disable-next-line react/prop-types
 const Login = () => {
+  const navigate = useNavigate();
+
   const form = useForm({
+    validateInputOnChange: true,
     initialValues: {
       email: "",
       password: "",
     },
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    },
   });
 
-  const navigate = useNavigate();
-
-  const handleSubmit = async () => {
+  const loginHandler = async (values) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/v1/login",
-        form.values
-      );
+      const response = await fetch("http://localhost:3001/api/v1/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (response.ok) {
+        const data = await response.json();
 
-      // Save user data for later use
-      localStorage.setItem("currentUser", JSON.stringify(response.data));
+        const authToken = data.token;
 
-      const authToken = response.data.token;
-      localStorage.setItem("authToken", authToken);
+        // Save user data to localStorage for later use
+        localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-      // Reload to ensure authentiaiton token is immediately available
-      window.location.reload;
-
-      console.log("User logged in:", response.data);
-      // if (response.data.id) {
-      //   navigate("/my-products");
-      // }
+        // Naive user authentication
+        if (authToken) {
+          navigate("/my-products");
+        }
+      } else {
+        const errorMessage = await response.json();
+        errorPopup(errorMessage.error);
+      }
     } catch (error) {
-      console.error("Error logging in:", error.message);
+      console.error(error.message);
+      errorPopup("An unexpected error occurred. Please try again.");
     }
   };
+
+  // Progress messages to user
+  const errorPopup = (message) => toast.error(message);
 
   return (
     <Flex
@@ -64,7 +78,7 @@ const Login = () => {
           border: "1px rgba(118, 117, 117, 0.5) solid",
         }}
       >
-        <form>
+        <form onSubmit={form.onSubmit((values) => loginHandler(values))}>
           <TextInput placeholder="Email" {...form.getInputProps("email")} />
           <PasswordInput
             mt="md"
@@ -72,7 +86,7 @@ const Login = () => {
             {...form.getInputProps("password")}
           />
           <Center>
-            <Button mt="xl" type="button" onClick={handleSubmit}>
+            <Button mt="xl" type="submit">
               Login
             </Button>
           </Center>
@@ -83,6 +97,7 @@ const Login = () => {
           </Text>
         </Center>
       </Box>
+      <ToastContainer position="top-center" autoClose={false} />
     </Flex>
   );
 };

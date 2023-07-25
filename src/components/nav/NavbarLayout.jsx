@@ -1,6 +1,7 @@
 import { AppShell } from "@mantine/core";
 import Header from "./Header";
 import { useEffect, useState } from "react";
+import NotLoggedIn from "../NotLoggedIn";
 
 // eslint-disable-next-line react/prop-types
 const NavbarLayout = ({ children }) => {
@@ -8,9 +9,12 @@ const NavbarLayout = ({ children }) => {
   const [user, setUser] = useState(currentUser);
 
   useEffect(() => {
-    // Update the user state whenever the currentUser changes
     setUser(JSON.parse(localStorage.getItem("currentUser")));
   }, []);
+
+  if (!user) {
+    return <NotLoggedIn />;
+  }
 
   return (
     <AppShell user={user} header={<Header user={user} height={50} p="xs" />}>

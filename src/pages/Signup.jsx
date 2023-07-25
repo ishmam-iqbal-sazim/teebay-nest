@@ -8,12 +8,13 @@ import {
   Flex,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -40,20 +41,26 @@ const Signup = () => {
     },
   });
 
-  const navigate = useNavigate();
   const registrationHandler = async (values) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/v1/register",
-        values
-      );
-      alert("Successfully signed up! Login to continue.");
-      if (response.data.id) {
+      const response = await fetch("http://localhost:3001/api/v1/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        alert("Successfully signed up! Login to continue.");
         navigate("/");
+      } else {
+        const data = await response.json();
+        throw new Error(data.error);
       }
     } catch (error) {
-      console.error("Error registering user:", error.response.data.error);
-      errorPopup(error.response.data.error);
+      console.error("Error registering user:", error.message);
+      errorPopup(error.message);
     }
   };
 
