@@ -15,6 +15,7 @@ import {
 } from "./products/controller.js";
 import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
+import { getAllCategories } from "./categories/controller.js";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -76,6 +77,9 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Error logging in" });
   }
 });
+
+// Get all categories
+router.get("/categories", getAllCategories);
 
 // Get all products
 router.get("/products", getAllProducts);

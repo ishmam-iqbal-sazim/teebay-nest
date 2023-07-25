@@ -13,18 +13,10 @@ import {
 import { useForm } from "@mantine/form";
 import { GrClose } from "react-icons/gr";
 
-const EditProduct = ({ product, onClose }) => {
+const EditProduct = ({ product, onClose, categories }) => {
   const userId = product.ownerId;
 
-  const categories = [
-    { label: "ELECTRONICS", value: "ELECTRONICS" },
-    { label: "FURNITURE", value: "FURNITURE" },
-    { label: "HOME APPLIANCES", value: "HOME APPLIANCES" },
-    { label: "SPORTING GOODS", value: "SPORTING GOODS" },
-    { label: "OUTDOOR", value: "OUTDOOR" },
-    { label: "TOYS", value: "TOYS" },
-  ];
-
+  // get current categories of product
   const productCategoriesArray = product.categories.map((category) => {
     return category.name;
   });
@@ -39,10 +31,20 @@ const EditProduct = ({ product, onClose }) => {
   };
 
   const form = useForm({
+    validateInputOnChange: true,
     initialValues: reshapedProduct,
+    validate: {
+      title: (value) => (value.length === 0 ? "Title is required." : null),
+      purchase_price: (value) =>
+        value.length === "" ? "Purchase price field is required" : null,
+      rent_price: (value) =>
+        value.length === "" ? "Rent price field is required" : null,
+      rent_duration: (value) =>
+        value.length === "" ? "Rent duration field is required" : null,
+    },
   });
 
-  const handleSubmit = async () => {
+  const handleConfirmEdit = async (values) => {
     try {
       const apiRes = await fetch(
         `http://localhost:3001/api/v1/${userId}/${product.id}/1`,
@@ -51,7 +53,7 @@ const EditProduct = ({ product, onClose }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(form.values),
+          body: JSON.stringify(values),
         }
       );
 
@@ -60,7 +62,6 @@ const EditProduct = ({ product, onClose }) => {
         return;
       }
 
-      alert("Product updated successfully!");
       onClose();
     } catch (error) {
       console.error("Error updating product data:", error);
@@ -84,7 +85,7 @@ const EditProduct = ({ product, onClose }) => {
           border: "1px rgba(118, 117, 117, 0.5) solid",
         }}
       >
-        <form>
+        <form onSubmit={form.onSubmit((values) => handleConfirmEdit(values))}>
           <Flex justify={"flex-end"} m={"lg"}>
             <ActionIcon onClick={onClose}>
               <GrClose />
@@ -135,7 +136,7 @@ const EditProduct = ({ product, onClose }) => {
             </Flex>
           </Box>
           <Center>
-            <Button mt="xl" type="button" onClick={handleSubmit}>
+            <Button mt="xl" type="submit">
               Edit Product
             </Button>
           </Center>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import {
   Stepper,
@@ -14,19 +15,11 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { GrClose } from "react-icons/gr";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// eslint-disable-next-line react/prop-types
-function AddProduct({ onClose, userId }) {
+function AddProduct({ onClose, userId, categories }) {
   const [active, setActive] = useState(0);
-
-  const categories = [
-    { label: "ELECTRONICS", value: "ELECTRONICS" },
-    { label: "FURNITURE", value: "FURNITURE" },
-    { label: "HOME APPLIANCES", value: "HOME APPLIANCES" },
-    { label: "SPORTING GOODS", value: "SPORTING GOODS" },
-    { label: "OUTDOOR", value: "OUTDOOR" },
-    { label: "TOYS", value: "TOYS" },
-  ];
 
   const form = useForm({
     initialValues: {
@@ -39,21 +32,23 @@ function AddProduct({ onClose, userId }) {
     },
   });
 
+  // display error message to user
+  const errorPopup = (message) => toast.error(message);
+
   const validateStep = () => {
-    // Validate the required fields in the current step
     const { title, categories, purchase_price, rent_price, rent_duration } =
       form.values;
     if (active === 0 && title.trim() === "") {
-      alert("Title is required.");
+      errorPopup("Title is required.");
       return false;
     } else if (active === 1 && categories.length === 0) {
-      alert("At least one category must be selected.");
+      errorPopup("At least one category must be selected.");
       return false;
     } else if (
       active === 3 &&
       (purchase_price === "" || rent_price === "" || rent_duration === "")
     ) {
-      alert("All price and rent fields are required.");
+      errorPopup("All price and rent fields are required.");
       return false;
     }
     return true;
@@ -194,6 +189,7 @@ function AddProduct({ onClose, userId }) {
           )}
         </Flex>
       </Container>
+      <ToastContainer position="top-center" autoClose={1500} />
     </Flex>
   );
 }

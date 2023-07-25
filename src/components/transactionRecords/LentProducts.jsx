@@ -4,17 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../ProductCard";
 import Loading from "../Loading";
 import NoProductsToDisplay from "../NoProductsToDisplay";
+import fetchTransactionRecords from "../../fetchData/fetchTransactionRecords";
 
 const LentProducts = ({ userId }) => {
   const queryResults = useQuery(
     [`${userId}_LentProducts`],
-    async () => {
-      const apiRes = await fetch(`http://localhost:3001/api/v1/${userId}/lent`);
-      if (!apiRes.ok) {
-        throw new Error(`products fetch not ok`);
-      }
-      return apiRes.json();
-    },
+    () => fetchTransactionRecords(userId, "lent"),
     { staleTime: Infinity }
   );
 

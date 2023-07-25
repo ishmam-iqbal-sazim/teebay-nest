@@ -5,6 +5,7 @@ import BuyOrRent from "../components/productActions/BuyOrRent";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
 import Loading from "../components/Loading";
+import fetchAllProducts from "../fetchData/fetchAllProducts";
 
 const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);
@@ -14,22 +15,16 @@ const AllProducts = () => {
 
   let user = JSON.parse(localStorage.getItem("currentUser"));
 
-  console.log(user);
-
   useEffect(() => {
     setUserId(user.id);
   }, [user.id]);
 
   const queryResults = useQuery(
     ["allProducts"],
-    async () => {
-      const apiRes = await fetch(`http://localhost:3001/api/v1/products`);
-      if (!apiRes.ok) {
-        throw new Error(`products fetch not ok`);
-      }
-      return apiRes.json();
-    },
-    { staleTime: Infinity }
+    () => fetchAllProducts(user.id),
+    {
+      staleTime: Infinity,
+    }
   );
 
   const products = queryResults.data;

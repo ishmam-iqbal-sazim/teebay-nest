@@ -9,7 +9,8 @@ import ProductDelete from "../components/DeleteIcon";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
 import { useDisclosure } from "@mantine/hooks";
-import NotLoggedIn from "../components/NotLoggedIn";
+import fetchMyProducts from "../fetchData/fetchMyProducts";
+import fetchCategories from "../fetchData/fetchCategories";
 
 const MyProducts = () => {
   const [isAddProductClicked, setIsAddProductClicked] = useState(false);
@@ -27,21 +28,31 @@ const MyProducts = () => {
 
   let userId = user?.id;
 
-  const queryResults = useQuery(
+  const categoriesQueryResults = useQuery(
+    ["categories"],
+    () => fetchCategories(),
+    {
+      staleTime: Infinity,
+    }
+  );
+  const productsQueryResults = useQuery(
     [`user${userId}Products`],
-    async () => {
-      const apiRes = await fetch(
-        `http://localhost:3001/api/v1/${userId}/products`
-      );
-      if (!apiRes.ok) {
-        throw new Error(`products fetch not ok`);
-      }
-      return apiRes.json();
-    },
+    () => fetchMyProducts(userId),
     { staleTime: Infinity }
   );
 
-  const products = queryResults.data;
+  const products = productsQueryResults.data;
+  const categoriesFromApi = categoriesQueryResults.data;
+
+  if (productsQueryResults.isLoading || categoriesQueryResults.isLoading) {
+    return <Loading />;
+  }
+
+  // reshape categories into {value: , label: } format as expected by form
+  const categories = categoriesFromApi.map((category) => ({
+    label: category.name,
+    value: category.name,
+  }));
 
   const handleAddProductClick = () => {
     setIsAddProductClicked(true);
@@ -49,7 +60,7 @@ const MyProducts = () => {
 
   const handleAddProductClose = () => {
     setIsAddProductClicked(false);
-    queryResults.refetch();
+    productsQueryResults.refetch();
   };
 
   const handleProductCardClick = (product) => {
@@ -60,24 +71,26 @@ const MyProducts = () => {
   const handleEditProductClose = () => {
     setOpenEditProduct(false);
     setProductToEdit({});
-    queryResults.refetch();
+    productsQueryResults.refetch();
   };
 
-  if (!userId) {
-    return <NotLoggedIn />;
-  }
-
-  if (queryResults.isLoading) {
-    return <Loading />;
-  }
-
   if (isAddProductClicked) {
-    return <AddProduct onClose={handleAddProductClose} userId={user.id} />;
+    return (
+      <AddProduct
+        onClose={handleAddProductClose}
+        userId={user.id}
+        categories={categories}
+      />
+    );
   }
 
   if (openEditProduct) {
     return (
-      <EditProduct onClose={handleEditProductClose} product={productToEdit} />
+      <EditProduct
+        onClose={handleEditProductClose}
+        product={productToEdit}
+        categories={categories}
+      />
     );
   }
 
@@ -96,7 +109,7 @@ const MyProducts = () => {
       }
       close();
       // refetch products
-      queryResults.refetch();
+      productsQueryResults.refetch();
     } catch (error) {
       console.error("Error deleting product:", error);
     }
