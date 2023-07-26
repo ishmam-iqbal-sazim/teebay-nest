@@ -12,11 +12,13 @@ const hardDeleteEverything = async () => {
     // Delete all records from product tables
     await prisma.product.deleteMany();
 
+    await prisma.category.deleteMany();
+
+    await prisma.user.deleteMany();
+
     // users can now simply be removed from database with prisma client
 
-    console.log(
-      "All data in transactions and products table have been deleted."
-    );
+    console.log("All data have been deleted.");
   } catch (error) {
     console.error("Error deleting records:", error);
   } finally {

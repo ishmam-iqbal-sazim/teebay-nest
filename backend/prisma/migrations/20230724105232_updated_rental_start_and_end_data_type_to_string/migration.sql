@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Transactions" ALTER COLUMN "rentalEnd" SET DATA TYPE TEXT,
-ALTER COLUMN "rentalStart" SET DATA TYPE TEXT;
