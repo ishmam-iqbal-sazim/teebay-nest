@@ -1,11 +1,11 @@
 version: "3.8"
 services:
   web:
-    build: .
+    build: ./frontend
     ports:
-      - 5173:5173
+      - 3000:5173
   api:
-    build: ./backend # This specifies the build context for the backend service
+    build: ./backend
     ports:
       - 3001:3001
     environment:
