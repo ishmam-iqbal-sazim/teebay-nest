@@ -13,13 +13,24 @@ async function main() {
   ];
 
   for (const category of categories) {
-    await prisma.category.create({
-      data: category,
+    // Check if the category already exists in the database
+    const existingCategory = await prisma.category.findUnique({
+      where: { name: category.name },
     });
+
+    if (!existingCategory) {
+      // Create the category if it does not exist
+      await prisma.category.create({
+        data: category,
+      });
+    } else {
+      console.log(`Category '${category.name}' already exists, skipping...`);
+    }
   }
 
   console.log("Categories seeded successfully");
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();
@@ -27,6 +38,5 @@ main()
   .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
-    // eslint-disable-next-line no-undef
     process.exit(1);
   });
