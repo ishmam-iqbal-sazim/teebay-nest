@@ -16,6 +16,7 @@ import { GrClose } from "react-icons/gr";
 import { formatDate } from "../../helper/formatDate";
 
 const BuyOrRent = ({ product, onClose, userId }) => {
+  // TODO Reusable input/form componennts
   const [rentOpened, { open: rentOpen, close: rentClose }] =
     useDisclosure(false);
   const [buyOpened, { open: buyOpen, close: buyClose }] = useDisclosure(false);

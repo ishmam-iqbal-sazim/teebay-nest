@@ -13,6 +13,7 @@ import {
 import { useForm } from "@mantine/form";
 
 const EditProduct = ({ product, onClose, categories }) => {
+  // TODO Reusable input/form componennts
   const userId = product.ownerId;
 
   // get current categories of product

@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function AddProduct({ onClose, userId, categories }) {
+  // TODO Reusable input/form componennts
   const [active, setActive] = useState(0);
 
   const form = useForm({

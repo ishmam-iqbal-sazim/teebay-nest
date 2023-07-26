@@ -8,9 +8,6 @@ import Loading from "../components/Loading";
 import fetchAllProducts from "../fetchData/fetchAllProducts";
 
 const AllProducts = () => {
-  // TODO
-  // Implement more details and less details in Product Description and improve styling of all product cards and summary
-  //TODO
   const [isProductClicked, setIsProductClicked] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(false);
 
