@@ -26,7 +26,7 @@ const MyProducts = () => {
     setUser(JSON.parse(localStorage.getItem("currentUser")));
   }, []);
 
-  let userId = user?.id;
+  let userId = user.id;
 
   const categoriesQueryResults = useQuery(
     ["categories"],
@@ -35,6 +35,7 @@ const MyProducts = () => {
       staleTime: Infinity,
     }
   );
+
   const productsQueryResults = useQuery(
     [`user${userId}Products`],
     () => fetchMyProducts(userId),

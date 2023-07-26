@@ -94,7 +94,7 @@ function AddProduct({ onClose, userId, categories }) {
 
   return (
     <Container mb={70}>
-      <Grid h={"85vh"} mah={"85vh"}>
+      <Grid h={"60vh"} mah={"60vh"} mb={50}>
         <Grid.Col>
           <Flex justify={"flex-end"} h={"100px"} mt={"2rem"}>
             <ActionIcon onClick={onClose}>

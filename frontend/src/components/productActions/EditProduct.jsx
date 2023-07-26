@@ -68,6 +68,8 @@ const EditProduct = ({ product, onClose, categories }) => {
     }
   };
 
+  // fix categories not uploading in edit product
+
   return (
     <form onSubmit={form.onSubmit((values) => handleConfirmEdit(values))}>
       <Center mt={"xl"} pt={"xl"}>
@@ -86,7 +88,7 @@ const EditProduct = ({ product, onClose, categories }) => {
               label="Categories"
               placeholder="Select a category"
               defaultValue={form.values.categories}
-              {...form.getInputProps("category")}
+              {...form.getInputProps("categories")}
             />
           </Grid.Col>
           <Grid.Col span={2} />

@@ -28,7 +28,6 @@ const Login = () => {
   });
 
   const loginHandler = async (values) => {
-    console.log(values);
     try {
       const response = await fetch("http://localhost:3001/api/v1/login", {
         method: "POST",

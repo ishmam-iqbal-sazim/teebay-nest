@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    ports:
+      - 5173:5173
+  api:
+    build: ./backend # This specifies the build context for the backend service
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: postgresql://mdishmamiqbal:password@localhost:5432/teebay_db?schema=public
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: mdishmamiqbal
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: teebay_db
+    ports:
+      - "5432:5432"
