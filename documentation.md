@@ -36,3 +36,5 @@ My frequency of git commits greatly decreased and this is due to the fact that i
 
 Struggling with authentication. Currently I am doing something weird with localstorage and I am unsure if its the best way. ChatGPT recommended use of JSON Web tokens and react router so tomorrow I will work on that.
 Also need to streamline the api endpoints but they are working fine thus far so I'd rather not create problems ahead of experiencing them.
+
+The whole docker setting up process was a mess in which I was stuck for a long time. Now, it seems as though docker is working, so enjoy your localhost hassle free one command app experience. A lot of headache endured for the user's comfort.

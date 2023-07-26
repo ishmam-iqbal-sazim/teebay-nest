@@ -61,7 +61,7 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("Error registering user:", error.message);
-      errorPopup(error.message);
+      errorPopup("An unexpected error occurred");
     }
   };
 

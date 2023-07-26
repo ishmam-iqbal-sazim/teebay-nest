@@ -5,8 +5,6 @@ import { FaTrash } from "react-icons/fa";
 const ProductDelete = ({ onDelete, id }) => {
   return (
     <ActionIcon
-      size={"lg"}
-      variant="transparent"
       onClick={(event) => {
         event.stopPropagation();
         onDelete(id);

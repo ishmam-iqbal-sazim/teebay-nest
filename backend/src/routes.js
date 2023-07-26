@@ -59,11 +59,11 @@ router.post("/login", async (req, res) => {
 
     // Handle authentication errors
     if (!user) {
-      return res.status(400).json({ error: "Email not registered" });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     if (password !== user.password) {
-      return res.status(400).json({ error: "Invalid password" });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     // generate secretKey
