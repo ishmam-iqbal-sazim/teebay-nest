@@ -20,10 +20,10 @@ Run the following commands in your terminal
 
 ## docker build
 
-Run the command
+Prior to running the `docker compose up --build` command please ensure that the **DATABASE_URL**, in `teebay/backend/.env`, for **localhost** is **commented out** and not the **docker** url
 
-`docker compose up --build`
-
-If you are using docker desktop, you can find a running container called teebay
+Run the command `docker compose up --build`
 
 This will run the application at http://localhost:5173
+
+If you are using docker desktop, you can find a running container called teebay
