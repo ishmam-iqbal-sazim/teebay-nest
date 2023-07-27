@@ -42,18 +42,20 @@ const MyProducts = () => {
     { staleTime: Infinity }
   );
 
-  const products = productsQueryResults.data;
-  const categoriesFromApi = categoriesQueryResults.data;
-
   if (productsQueryResults.isLoading || categoriesQueryResults.isLoading) {
     return <Loading />;
   }
+  const products = productsQueryResults.data;
+  const categoriesFromApi = categoriesQueryResults.data;
 
   // reshape categories into {value: , label: } format as expected by form
-  const categories = categoriesFromApi.map((category) => ({
-    label: category.name,
-    value: category.name,
-  }));
+
+  const categories =
+    categoriesFromApi &&
+    categoriesFromApi.map((category) => ({
+      label: category.name,
+      value: category.name,
+    }));
 
   const handleAddProductClick = () => {
     setIsAddProductClicked(true);
@@ -124,7 +126,7 @@ const MyProducts = () => {
             MY PRODUCTS{" "}
           </Title>
         </Grid.Col>
-        {products.length == 0 ? (
+        {!products || !categoriesFromApi || products.length === 0 ? (
           <Grid.Col>
             <NoProductsToDisplay text={"You have no products"} />
           </Grid.Col>

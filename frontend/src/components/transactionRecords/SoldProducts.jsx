@@ -26,7 +26,7 @@ const SoldProducts = ({ userId }) => {
 
   return (
     <Container my={"xl"} py={"xl"} size={"lg"}>
-      {products.length == 0 ? (
+      {!products || products.length == 0 ? (
         <NoProductsToDisplay text={"No sold products"} />
       ) : (
         products.map((product) => (

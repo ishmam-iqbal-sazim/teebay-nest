@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 
 const getAllProducts = async (req, res) => {
   try {
-    const userId = parseInt(req.query.userId);
     const products = await prisma.product.findMany({
       where: {
         // filtering products that are already sold or rented
@@ -17,7 +16,6 @@ const getAllProducts = async (req, res) => {
             },
           },
         },
-        ownerId: { not: userId },
       },
       select: {
         id: true,
