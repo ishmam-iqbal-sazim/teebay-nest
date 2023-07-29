@@ -16,7 +16,7 @@ Experienced some weird errors with cors which was resolved by enabling the CORS 
 
 ## Starting Part 2
 
-Faced a lot of trouble with the getMyProducts and addProduct api methods due to unfamiliarity with the syntax. Struggled a lot while using postman and was scratching my head as to why the post method wasn't working. Turns out I was sending the request in raw text format and not json. :)
+Faced a lot of trouble with the getMyProducts and addProduct api methods due to unfamiliarity with the syntax. Struggled a lot while using postman and was scratching my head as to why the post method wasn't working. Turns out I was sending the request in raw text format and not json.
 
 Both fe and be completed for part 2 and that was very challenging for me. Mostly due to lack of experience. Working in fe mostly, built good habits for debugging in front end however, lack of experience in backend got me scrambled in the most minor of issues. Picked up a few pointers for debugging such as console.logging with checkpoints in multiple lines to check which command was causing the error. Encountered a lot of weird errors. An example would be I was sending userId params as strings but the database was expecting integers. That took way too long for me to figure out.
 
