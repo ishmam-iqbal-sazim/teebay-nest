@@ -38,3 +38,9 @@ Struggling with authentication. Currently I am doing something weird with locals
 Also need to streamline the api endpoints but they are working fine thus far so I'd rather not create problems ahead of experiencing them.
 
 The whole docker setting up process was a mess in which I was stuck for a long time. Now, it seems as though docker is working, so enjoy your localhost hassle free one command app experience. A lot of headache endured for the user's comfort.
+
+## Summary
+
+Working on this project was a great experience from start to finish. All the problems I faced boils down to my lack of experience and exposure to the technologies. But loved working with these new technologies, it was a great learning experience. This has also inspired me to not limit myself to the frontend technologies, although important, but branching out is necessary. I also understood that why concepts such as reusability is so important. Things get confusing very fast as the codebase grows. I intend to imporve on these good developer habits as well.
+Last note, a big thank you to those who designed this project. It was a good balance of challenging and helpful. You pushed my limits but you also guided me as much as necessary so its not overwhelming.
+All in all, great experience. Thank you for this opportunity.
