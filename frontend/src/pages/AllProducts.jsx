@@ -27,9 +27,7 @@ const AllProducts = () => {
     }
   );
 
-  const products = queryResults.data;
-
-  console.log(products);
+  const products = queryResults.data || [];
 
   if (queryResults.isLoading) {
     return <Loading />;
@@ -56,6 +54,8 @@ const AllProducts = () => {
     );
   }
 
+  console.log(products);
+
   return (
     <Container my="xl" py={"lg"}>
       <Grid>
@@ -64,7 +64,7 @@ const AllProducts = () => {
             ALL PRODUCTS{" "}
           </Title>
         </Grid.Col>
-        {products.length === 0 ? (
+        {!products || products.length === 0 ? (
           <Grid.Col>
             <NoProductsToDisplay text={"No products to display"} />
           </Grid.Col>
