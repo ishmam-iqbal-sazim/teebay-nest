@@ -1,6 +1,10 @@
 import express from "express";
-import routes from "./src/routes.js";
 import cors from "cors";
+
+import routes from "./src/routes.js";
+import userRoutes from "./src/routes/userRoutes.js";
+import categoryRoutes from "./src/routes/categoryRoutes.js";
+import productRoutes from "./src/routes/productRoutes.js";
 
 const app = express();
 
@@ -13,7 +17,9 @@ app.use(
   })
 );
 
-app.use("/api/v1", routes);
+app.use("/api/v1", productRoutes);
+app.use("/api/v1", categoryRoutes);
+app.use("/api/v1", userRoutes);
 
 app.get("/", (req, res) => {
   console.log("hello from express");

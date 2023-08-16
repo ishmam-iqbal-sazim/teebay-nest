@@ -1,4 +1,4 @@
-import { AppShell } from "@mantine/core";
+import { AppShell, Paper } from "@mantine/core";
 import Header from "./Header";
 import { useEffect, useState } from "react";
 import NotLoggedIn from "../NotLoggedIn";

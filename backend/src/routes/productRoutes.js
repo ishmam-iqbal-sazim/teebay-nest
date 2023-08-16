@@ -11,7 +11,7 @@ import {
   getSoldProducts,
   getRentedProducts,
   getLentProducts,
-} from "./controller/productsController.js";
+} from "../controller/productsController.js";
 
 const router = Router();
 

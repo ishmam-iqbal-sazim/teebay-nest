@@ -110,6 +110,8 @@ function AddProduct({ onClose, userId, categories }) {
               onStepClick={setActive}
               breakpoint="sm"
               w={"80vh"}
+              allowNextStepsSelect={false}
+              color="indigo"
             >
               <Stepper.Step>
                 <Center my={30}>

@@ -12,6 +12,9 @@ import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import MyTextInput from "../components/formComponents/MyTextInput";
+import MyPasswordInput from "../components/formComponents/MyPasswordInput";
+import MyButton from "../components/formComponents/MyButton";
 
 // eslint-disable-next-line react/prop-types
 const Login = () => {
@@ -82,26 +85,21 @@ const Login = () => {
         <form onSubmit={form.onSubmit((values) => loginHandler(values))}>
           <Grid gutter="xl">
             <Grid.Col>
-              <TextInput placeholder="Email" {...form.getInputProps("email")} />
+              <MyTextInput
+                placeholder="Email"
+                inputProps={{ ...form.getInputProps("email") }}
+              />
             </Grid.Col>
             <Grid.Col>
-              <PasswordInput
+              <MyPasswordInput
                 placeholder="Password"
-                {...form.getInputProps("password")}
+                inputProps={{ ...form.getInputProps("password") }}
               />
             </Grid.Col>
             <Grid.Col></Grid.Col>
             <Grid.Col>
               <Center>
-                <Button
-                  size="sm"
-                  type="submit"
-                  uppercase
-                  color="violet"
-                  radius={"sm"}
-                >
-                  Login
-                </Button>
+                <MyButton text="login" />
               </Center>
             </Grid.Col>
             <Grid.Col></Grid.Col>

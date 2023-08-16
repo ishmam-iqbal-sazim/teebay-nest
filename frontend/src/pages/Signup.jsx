@@ -1,17 +1,11 @@
-import {
-  Box,
-  Button,
-  PasswordInput,
-  TextInput,
-  Center,
-  Text,
-  Flex,
-  Grid,
-} from "@mantine/core";
+import { Box, Center, Text, Flex, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import MyTextInput from "../components/formComponents/MyTextInput";
+import MyPasswordInput from "../components/formComponents/MyPasswordInput";
+import MyButton from "../components/formComponents/MyButton";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -68,6 +62,8 @@ const Signup = () => {
   // Progress messages to user
   const errorPopup = (message) => toast.error(message);
 
+  console.log({ ...form.getInputProps("password") });
+
   return (
     <Flex
       justify="center"
@@ -87,67 +83,50 @@ const Signup = () => {
         <form onSubmit={form.onSubmit((values) => registrationHandler(values))}>
           <Grid gutter="xl">
             <Grid.Col span={6}>
-              <TextInput
-                size="md"
+              <MyTextInput
                 placeholder="First Name"
-                {...form.getInputProps("first_name")}
+                inputProps={{ ...form.getInputProps("first_name") }}
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                size="md"
+              <MyTextInput
                 placeholder="Last Name"
-                {...form.getInputProps("last_name")}
+                inputProps={{ ...form.getInputProps("last_name") }}
               />
             </Grid.Col>
             <Grid.Col>
-              <TextInput
-                size="md"
+              <MyTextInput
                 placeholder="Address"
-                {...form.getInputProps("address")}
+                inputProps={{ ...form.getInputProps("address") }}
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                size="md"
+              <MyTextInput
                 placeholder="Email"
-                {...form.getInputProps("email")}
+                inputProps={{ ...form.getInputProps("email") }}
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                size="md"
+              <MyTextInput
                 placeholder="Phone Number"
-                {...form.getInputProps("phone_number")}
+                inputProps={{ ...form.getInputProps("phone_number") }}
               />
             </Grid.Col>
             <Grid.Col>
-              <PasswordInput
-                size="md"
+              <MyPasswordInput
                 placeholder="Password"
-                {...form.getInputProps("password")}
+                inputProps={{ ...form.getInputProps("password") }}
               />
             </Grid.Col>
             <Grid.Col>
-              <PasswordInput
-                size="md"
+              <MyPasswordInput
                 placeholder="Confirm password"
-                {...form.getInputProps("confirm_password")}
+                inputProps={{ ...form.getInputProps("confirm_password") }}
               />
             </Grid.Col>
             <Grid.Col></Grid.Col>
             <Grid.Col>
-              <Center>
-                <Button
-                  size="sm"
-                  type="submit"
-                  uppercase
-                  color="violet"
-                  radius={"sm"}
-                >
-                  Register
-                </Button>
-              </Center>
+              <MyButton text="register" />
             </Grid.Col>
             <Grid.Col></Grid.Col>
             <Grid.Col>
