@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MyTextInput from "../components/formComponents/MyTextInput";
 import MyPasswordInput from "../components/formComponents/MyPasswordInput";
 import MyButton from "../components/formComponents/MyButton";
+import { validateEmail } from "../lib/formValidation";
 
 // eslint-disable-next-line react/prop-types
 const Login = () => {
@@ -26,7 +27,7 @@ const Login = () => {
       password: "",
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      email: validateEmail,
     },
   });
 

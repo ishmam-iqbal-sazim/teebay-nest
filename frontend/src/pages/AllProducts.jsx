@@ -5,7 +5,7 @@ import BuyOrRent from "../components/productActions/BuyOrRent";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
 import Loading from "../components/Loading";
-import fetchAllProducts from "../fetchData/fetchAllProducts";
+import fetchAllProducts from "../data/fetchAllProducts";
 
 const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);

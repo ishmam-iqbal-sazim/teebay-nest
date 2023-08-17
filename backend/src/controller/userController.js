@@ -1,15 +1,36 @@
-import Router from "express";
 import { PrismaClient } from "@prisma/client";
 
 import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
+import {
+  validateFirstName,
+  validateLastName,
+  validatePassword,
+  validateEmail,
+} from "../utils/userValidation.js";
 
-const router = Router();
 const prisma = new PrismaClient();
 
 const registerUser = async (req, res) => {
   const { email, password, address, phone_number, first_name, last_name } =
     req.body;
+
+  // Validate input fields
+  const firstNameError = validateFirstName(first_name);
+  const lastNameError = validateLastName(last_name);
+  const emailError = validateEmail(email);
+  const passwordError = validatePassword(password);
+
+  if (firstNameError || lastNameError || emailError || passwordError) {
+    return res.status(400).json({
+      error: {
+        firstName: firstNameError,
+        lastName: lastNameError,
+        email: emailError,
+        password: passwordError,
+      },
+    });
+  }
 
   try {
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -38,6 +59,21 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+
+  console.log(email, password);
+
+  // Validate input fields
+  const emailError = validateEmail(email);
+  const passwordError = validatePassword(password);
+
+  if (emailError || passwordError) {
+    return res.status(400).json({
+      error: {
+        email: emailError,
+        password: passwordError,
+      },
+    });
+  }
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });

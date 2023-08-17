@@ -6,6 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import MyTextInput from "../components/formComponents/MyTextInput";
 import MyPasswordInput from "../components/formComponents/MyPasswordInput";
 import MyButton from "../components/formComponents/MyButton";
+import {
+  validateAddress,
+  validateConfirmPassword,
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePassword,
+} from "../lib/formValidation";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -22,17 +30,12 @@ const Signup = () => {
       last_name: "",
     },
     validate: {
-      first_name: (value) =>
-        (value.length === 0) | (value.length < 2)
-          ? "Name must have at least 2 letters"
-          : null,
-      last_name: (value) =>
-        value.length < 2 ? "Name must have at least 2 letters" : null,
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) =>
-        value.length < 8 ? "Password must have at least 8 characters" : null,
-      confirm_password: (value, values) =>
-        value !== values.password ? "Passwords did not match" : null,
+      first_name: validateFirstName,
+      last_name: validateLastName,
+      address: validateAddress,
+      email: validateEmail,
+      password: validatePassword,
+      confirm_password: validateConfirmPassword,
     },
   });
 
@@ -61,8 +64,6 @@ const Signup = () => {
 
   // Progress messages to user
   const errorPopup = (message) => toast.error(message);
-
-  console.log({ ...form.getInputProps("password") });
 
   return (
     <Flex

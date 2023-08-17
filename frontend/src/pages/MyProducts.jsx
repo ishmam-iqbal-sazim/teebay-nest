@@ -9,8 +9,8 @@ import ProductDelete from "../components/DeleteIcon";
 import NoProductsToDisplay from "../components/NoProductsToDisplay";
 import ProductCard from "../components/ProductCard";
 import { useDisclosure } from "@mantine/hooks";
-import fetchMyProducts from "../fetchData/fetchMyProducts";
-import fetchCategories from "../fetchData/fetchCategories";
+import fetchMyProducts from "../data/fetchMyProducts";
+import fetchCategories from "../data/fetchCategories";
 
 const MyProducts = () => {
   const [isAddProductClicked, setIsAddProductClicked] = useState(false);
