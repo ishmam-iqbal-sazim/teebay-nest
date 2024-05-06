@@ -23,47 +23,44 @@ const Signup = () => {
     initialValues: {
       email: "",
       password: "",
-      confirm_password: "",
+      confirmPassword: "",
       address: "",
-      phone_number: "",
-      first_name: "",
-      last_name: "",
+      phoneNumber: "",
+      firstName: "",
+      lastName: "",
     },
     validate: {
-      first_name: validateFirstName,
-      last_name: validateLastName,
+      firstName: validateFirstName,
+      lastName: validateLastName,
       address: validateAddress,
       email: validateEmail,
       password: validatePassword,
-      confirm_password: validateConfirmPassword,
+      confirmPassword: validateConfirmPassword,
     },
   });
 
   const registrationHandler = async (values) => {
     try {
-      const response = await fetch("http://localhost:3001/api/v1/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      const response = await fetch(
+        "http://localhost:3001/api/v1/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
 
       if (response.ok) {
-        alert("Successfully signed up! Login to continue.");
+        toast.success("Successfully signed up! Login to continue.");
         navigate("/");
-      } else {
-        const data = await response.json();
-        throw new Error(data.error);
       }
     } catch (error) {
       console.error("Error registering user:", error.message);
-      errorPopup(error.message);
+      toast.error(error.message);
     }
   };
-
-  // Progress messages to user
-  const errorPopup = (message) => toast.error(message);
 
   return (
     <Flex
@@ -86,13 +83,13 @@ const Signup = () => {
             <Grid.Col span={6}>
               <MyTextInput
                 placeholder="First Name"
-                inputProps={{ ...form.getInputProps("first_name") }}
+                inputProps={{ ...form.getInputProps("firstName") }}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <MyTextInput
                 placeholder="Last Name"
-                inputProps={{ ...form.getInputProps("last_name") }}
+                inputProps={{ ...form.getInputProps("lastName") }}
               />
             </Grid.Col>
             <Grid.Col>
@@ -110,7 +107,7 @@ const Signup = () => {
             <Grid.Col span={6}>
               <MyTextInput
                 placeholder="Phone Number"
-                inputProps={{ ...form.getInputProps("phone_number") }}
+                inputProps={{ ...form.getInputProps("phoneNumber") }}
               />
             </Grid.Col>
             <Grid.Col>
@@ -122,7 +119,7 @@ const Signup = () => {
             <Grid.Col>
               <MyPasswordInput
                 placeholder="Confirm password"
-                inputProps={{ ...form.getInputProps("confirm_password") }}
+                inputProps={{ ...form.getInputProps("confirmPassword") }}
               />
             </Grid.Col>
             <Grid.Col></Grid.Col>

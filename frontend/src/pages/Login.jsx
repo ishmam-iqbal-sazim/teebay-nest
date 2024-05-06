@@ -17,7 +17,6 @@ import MyPasswordInput from "../components/formComponents/MyPasswordInput";
 import MyButton from "../components/formComponents/MyButton";
 import { validateEmail } from "../lib/formValidation";
 
-// eslint-disable-next-line react/prop-types
 const Login = () => {
   const navigate = useNavigate();
 
@@ -33,39 +32,26 @@ const Login = () => {
 
   const loginHandler = async (values) => {
     try {
-      const response = await fetch("http://localhost:3001/api/v1/login", {
+      const response = await fetch("http://localhost:3001/api/v1/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
+
       if (response.ok) {
         const data = await response.json();
 
-        console.log(data);
+        localStorage.setItem("currentUser", JSON.stringify(data));
 
-        const authToken = data.token;
-
-        // Save user data to localStorage for later use
-        localStorage.setItem("currentUser", JSON.stringify(data.user));
-
-        // Naive user authentication
-        if (authToken) {
-          navigate("/my-products");
-        }
-      } else {
-        const errorMessage = await response.json();
-        errorPopup(errorMessage.error);
+        navigate("/my-products");
       }
     } catch (error) {
       console.error(error.message);
-      errorPopup("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
-
-  // Progress messages to user
-  const errorPopup = (message) => toast.error(message);
 
   return (
     <Flex
