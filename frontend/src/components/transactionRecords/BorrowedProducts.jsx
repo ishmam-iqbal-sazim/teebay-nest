@@ -9,11 +9,22 @@ import fetchTransactionRecords from "../../data/fetchTransactionRecords";
 const BorrowedProducts = ({ userId }) => {
   const queryResults = useQuery(
     [`${userId}_BorrowedProducts`],
-    () => fetchTransactionRecords(userId, "rented"),
-    { staleTime: Infinity }
+    () => fetchTransactionRecords(userId, "RENTED"),
+    { staleTime: 0 }
   );
 
-  const products = queryResults.data;
+  let products = queryResults.data;
+
+  if (products) {
+    const replaceUnderscores = (categories) => {
+      return categories.map((category) => category.replace(/_/g, " "));
+    };
+
+    products = products.map((product) => ({
+      ...product,
+      categories: replaceUnderscores(product.categories),
+    }));
+  }
 
   if (queryResults.isLoading) {
     return <Loading />;

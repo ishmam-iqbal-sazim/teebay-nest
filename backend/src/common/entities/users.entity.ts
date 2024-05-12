@@ -1,6 +1,8 @@
 import {
+  Collection,
   Entity,
   EntityRepositoryType,
+  OneToMany,
   OneToOne,
   PrimaryKey,
   Property,
@@ -11,6 +13,7 @@ import { CustomBaseEntity } from './base.entity';
 
 import { CustomUsersRepository } from '../repositories/custom-users.repository';
 import { UserProfile } from './user-profiles.entity';
+import { Product } from './products.entity';
 
 @Entity({
   tableName: 'users',
@@ -29,12 +32,15 @@ export class User extends CustomBaseEntity {
   @PrimaryKey({ autoincrement: true })
   id!: number;
 
-  @Property({ unique: true })
+  @Property({ fieldName: 'email', unique: true })
   email!: string;
 
-  @Property({ nullable: true })
-  password?: string | null;
+  @Property({ fieldName: 'password' })
+  password!: string;
 
   @OneToOne(() => UserProfile, { mappedBy: (userProfile) => userProfile.user })
   userProfile!: Rel<UserProfile>;
+
+  @OneToMany(() => Product, (product) => product.user)
+  products = new Collection<Product>(this);
 }

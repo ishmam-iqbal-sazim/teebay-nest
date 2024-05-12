@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
+import { User } from '@/common/entities/users.entity';
+import { UserProfile } from '@/common/entities/user-profiles.entity';
+
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { User } from 'src/common/entities/users.entity';
-import { UserProfile } from 'src/common/entities/user-profiles.entity';
 
 @Module({
   imports: [MikroOrmModule.forFeature([User, UserProfile])],

@@ -2,6 +2,7 @@
 import { Card, Flex, Text, Title } from "@mantine/core";
 
 const ProductCard = ({ product, deleteIcon, rentalPeriod }) => {
+  console.log(product);
   const formattedTitle =
     product.title.toLowerCase().charAt(0).toUpperCase() +
     product.title.slice(1);
@@ -27,7 +28,7 @@ const ProductCard = ({ product, deleteIcon, rentalPeriod }) => {
           Categories:{" "}
           {product.categories
             .map((category) => {
-              const categoryName = category.name.toLowerCase();
+              const categoryName = category.toLowerCase();
               return (
                 categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
               );
@@ -35,8 +36,8 @@ const ProductCard = ({ product, deleteIcon, rentalPeriod }) => {
             .join(", ")}
         </Text>
         <Text my={5} c={"dimmed"}>
-          {product.purchase_price} | Rent: $
-          {`${product.rent_price} ${product.rent_duration}`}
+          {product.purchasePrice} | Rent: $
+          {`${product.rentPrice} ${product.rentDuration.toUpperCase()}`}
         </Text>
         <Text my={10}>{product.description}</Text>
         {rentalPeriod && (

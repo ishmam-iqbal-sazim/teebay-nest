@@ -1,12 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+
+import { UsersService } from '@/users/users.service';
+
+import { RegisterDto } from './auth.dtos';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersService: UsersService) {}
 
-  register(registerDTO) {
-    const user = this.usersService.create(registerDTO);
+  async register(registerDTO: RegisterDto) {
+    const user = await this.usersService.create(registerDTO);
 
     return user;
   }
@@ -17,14 +20,6 @@ export class AuthService {
     if (user.password !== loginUserDTO.password)
       throw new UnauthorizedException('Invalid user credentials');
 
-    const userResponse = {
-      firstName: user.userProfile.firstName,
-      lastName: user.userProfile.lastName,
-      address: user.userProfile.address,
-      phoneNumber: user.userProfile.phoneNumber,
-      email: user.email,
-    };
-
-    return userResponse;
+    return user;
   }
 }

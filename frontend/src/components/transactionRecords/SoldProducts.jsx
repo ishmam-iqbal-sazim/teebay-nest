@@ -4,21 +4,27 @@ import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../ProductCard";
 import Loading from "../Loading";
 import NoProductsToDisplay from "../NoProductsToDisplay";
+import fetchTransactionRecords from "../../data/fetchTransactionRecords";
 
 const SoldProducts = ({ userId }) => {
   const queryResults = useQuery(
     [`${userId}_SoldProducts`],
-    async () => {
-      const apiRes = await fetch(`http://localhost:3001/api/v1/${userId}/sold`);
-      if (!apiRes.ok) {
-        throw new Error(`products fetch not ok`);
-      }
-      return apiRes.json();
-    },
-    { staleTime: Infinity }
+    () => fetchTransactionRecords(userId, "SOLD"),
+    { staleTime: 0 }
   );
 
-  const products = queryResults.data;
+  let products = queryResults.data;
+
+  if (products) {
+    const replaceUnderscores = (categories) => {
+      return categories.map((category) => category.replace(/_/g, " "));
+    };
+
+    products = products.map((product) => ({
+      ...product,
+      categories: replaceUnderscores(product.categories),
+    }));
+  }
 
   if (queryResults.isLoading) {
     return <Loading />;

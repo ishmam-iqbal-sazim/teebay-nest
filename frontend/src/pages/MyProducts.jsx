@@ -26,8 +26,6 @@ const MyProducts = () => {
     setUser(JSON.parse(localStorage.getItem("currentUser")));
   }, []);
 
-  let userId = user.id;
-
   const categoriesQueryResults = useQuery(
     ["categories"],
     () => fetchCategories(),
@@ -37,15 +35,27 @@ const MyProducts = () => {
   );
 
   const productsQueryResults = useQuery(
-    [`user${userId}Products`],
-    () => fetchMyProducts(userId),
-    { staleTime: Infinity }
+    [`user${user.id}Products`],
+    () => fetchMyProducts(user.id),
+    { staleTime: 0 }
   );
 
   if (productsQueryResults.isLoading || categoriesQueryResults.isLoading) {
     return <Loading />;
   }
-  const products = productsQueryResults.data;
+  let products = productsQueryResults.data;
+
+  if (products) {
+    const replaceUnderscores = (categories) => {
+      return categories.map((category) => category.replace(/_/g, " "));
+    };
+
+    products = products.map((product) => ({
+      ...product,
+      categories: replaceUnderscores(product.categories),
+    }));
+  }
+
   const categoriesFromApi = categoriesQueryResults.data;
 
   // reshape categories into {value: , label: } format as expected by form
@@ -53,8 +63,8 @@ const MyProducts = () => {
   const categories =
     categoriesFromApi &&
     categoriesFromApi.map((category) => ({
-      label: category.name,
-      value: category.name,
+      label: category,
+      value: category,
     }));
 
   const handleAddProductClick = () => {
@@ -100,7 +110,7 @@ const MyProducts = () => {
   const handleDelete = async (productId) => {
     try {
       const apiRes = await fetch(
-        `http://localhost:3001/api/v1/${userId}/${productId}/2`,
+        `http://localhost:3001/api/v1/users/${user.id}/products/${productId}`,
         {
           method: "DELETE",
         }

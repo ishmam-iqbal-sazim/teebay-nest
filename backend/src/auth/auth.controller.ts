@@ -1,19 +1,33 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginDto, RegisterDto } from './auth.dtos';
+import { serialize } from '@mikro-orm/core';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() registerDto) {
-    const user = this.authService.register(registerDto);
+  async register(@Body() registerDto: RegisterDto) {
+    const user = await this.authService.register(registerDto);
 
-    return user;
+    return serialize(user, {
+      skipNull: true,
+      forceObject: true,
+      exclude: ['password'],
+      populate: ['userProfile'],
+    });
   }
 
   @Post('login')
-  login(@Body() loginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto) {
+    const user = await this.authService.login(loginDto);
+
+    return serialize(user, {
+      skipNull: true,
+      forceObject: true,
+      exclude: ['password'],
+      populate: ['userProfile'],
+    });
   }
 }

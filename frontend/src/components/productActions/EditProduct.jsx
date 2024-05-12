@@ -14,19 +14,19 @@ import { useForm } from "@mantine/form";
 
 const EditProduct = ({ product, onClose, categories }) => {
   // TODO Reusable input/form componennts
-  const userId = product.ownerId;
+  const userId = product.user;
 
   // get current categories of product
   const productCategoriesArray = product.categories.map((category) => {
-    return category.name;
+    return category;
   });
 
   let reshapedProduct = {
     title: product.title,
     description: product.description,
-    purchase_price: product.purchase_price,
-    rent_price: product.rent_price,
-    rent_duration: product.rent_duration,
+    purchasePrice: product.purchasePrice,
+    rentPrice: product.rentPrice,
+    rentDuration: product.rentDuration,
     categories: productCategoriesArray,
   };
 
@@ -35,19 +35,23 @@ const EditProduct = ({ product, onClose, categories }) => {
     initialValues: reshapedProduct,
     validate: {
       title: (value) => (value.length === 0 ? "Title is required." : null),
-      purchase_price: (value) =>
+      purchasePrice: (value) =>
         value.length === "" ? "Purchase price field is required" : null,
-      rent_price: (value) =>
+      rentPrice: (value) =>
         value.length === "" ? "Rent price field is required" : null,
-      rent_duration: (value) =>
+      rentDuration: (value) =>
         value.length === "" ? "Rent duration field is required" : null,
     },
   });
 
   const handleConfirmEdit = async (values) => {
     try {
+      values.categories = values.categories.map((category) =>
+        category.replace(/ /g, "_")
+      );
+
       const apiRes = await fetch(
-        `http://localhost:3001/api/v1/${userId}/${product.id}/1`,
+        `http://localhost:3001/api/v1/users/${userId}/products/${product.id}`,
         {
           method: "PATCH",
           headers: {
@@ -107,25 +111,25 @@ const EditProduct = ({ product, onClose, categories }) => {
               <NumberInput
                 size="md"
                 label="Price"
-                {...form.getInputProps("purchase_price")}
+                {...form.getInputProps("purchasePrice")}
               />
               <Group position="right" spacing={"md"}>
                 <NumberInput
                   size="md"
                   label="Rent"
-                  {...form.getInputProps("rent_price")}
+                  {...form.getInputProps("rentPrice")}
                 />
                 <Select
                   mt={"lg"}
                   placeholder="Select option"
-                  defaultValue={form.values.rent_duration}
+                  defaultValue={form.values.rentDuration}
                   data={[
                     { value: "daily", label: "Daily" },
                     { value: "hourly", label: "Hourly" },
                     { value: "weekly", label: "Weekly" },
                     { value: "monthly", label: "Monthly" },
                   ]}
-                  {...form.getInputProps("rent_duration")}
+                  {...form.getInputProps("rentDuration")}
                 />
               </Group>
             </Group>

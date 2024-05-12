@@ -30,9 +30,9 @@ function AddProduct({ onClose, userId, categories }) {
     initialValues: {
       title: "",
       description: "",
-      purchase_price: "",
-      rent_price: "",
-      rent_duration: "",
+      purchasePrice: "",
+      rentPrice: "",
+      rentDuration: "",
       categories: [],
     },
   });
@@ -41,7 +41,7 @@ function AddProduct({ onClose, userId, categories }) {
   const errorPopup = (message) => toast.error(message);
 
   const validateStep = () => {
-    const { title, categories, purchase_price, rent_price, rent_duration } =
+    const { title, categories, purchasePrice, rentPrice, rentDuration } =
       form.values;
     if (active === 0 && title.trim() === "") {
       errorPopup("Title is required.");
@@ -51,7 +51,7 @@ function AddProduct({ onClose, userId, categories }) {
       return false;
     } else if (
       active === 3 &&
-      (purchase_price === "" || rent_price === "" || rent_duration === "")
+      (purchasePrice === "" || rentPrice === "" || rentDuration === "")
     ) {
       errorPopup("All price and rent fields are required.");
       return false;
@@ -71,8 +71,14 @@ function AddProduct({ onClose, userId, categories }) {
 
   const handleSubmit = async () => {
     try {
+      const { values } = form;
+
+      values.categories = values.categories.map((category) =>
+        category.replace(/ /g, "_")
+      );
+
       const apiRes = await fetch(
-        `http://localhost:3001/api/v1/${userId}/product`,
+        `http://localhost:3001/api/v1/users/${userId}/products`,
         {
           method: "POST",
           headers: {
@@ -84,9 +90,11 @@ function AddProduct({ onClose, userId, categories }) {
 
       if (!apiRes.ok) {
         console.error("Error saving product data");
+        toast.error("Product add failed!");
         return;
       }
-      alert("Product added successfully!");
+
+      toast.success("Product added successfully!");
       onClose();
     } catch (error) {
       console.error("Error saving product data:", error);
@@ -148,14 +156,14 @@ function AddProduct({ onClose, userId, categories }) {
                     maw={300}
                     size="md"
                     placeholder="Purchase price"
-                    {...form.getInputProps("purchase_price")}
+                    {...form.getInputProps("purchasePrice")}
                   />
                 </Center>
                 <Group position="center" mt={50}>
                   <NumberInput
                     label="Rent"
                     placeholder="$40"
-                    {...form.getInputProps("rent_price")}
+                    {...form.getInputProps("rentPrice")}
                   />
                   <Select
                     mt={20}
@@ -166,7 +174,7 @@ function AddProduct({ onClose, userId, categories }) {
                       { value: "weekly", label: "Weekly" },
                       { value: "monthly", label: "Monthly" },
                     ]}
-                    {...form.getInputProps("rent_duration")}
+                    {...form.getInputProps("rentDuration")}
                   />
                 </Group>
               </Stepper.Step>
@@ -198,8 +206,8 @@ function AddProduct({ onClose, userId, categories }) {
                   </Grid.Col>
                   <Grid.Col>
                     <Text>
-                      Price: {form.values.purchase_price}, To rent:{" "}
-                      {form.values.rent_price}
+                      Price: {form.values.purchasePrice}, To rent:{" "}
+                      {form.values.rentPrice}
                     </Text>
                   </Grid.Col>
                 </Grid>

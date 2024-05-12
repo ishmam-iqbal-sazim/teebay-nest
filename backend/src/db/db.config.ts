@@ -1,6 +1,8 @@
-import { ReflectMetadataProvider } from '@mikro-orm/core';
+import { ReflectMetadataProvider, Dictionary } from '@mikro-orm/core';
+import { IPrimaryKeyValue } from '@mikro-orm/core/typings';
 import { Migrator, TSMigrationGenerator } from '@mikro-orm/migrations';
 import { defineConfig } from '@mikro-orm/postgresql';
+import { Logger, NotFoundException } from '@nestjs/common';
 
 import * as path from 'path';
 
@@ -40,6 +42,31 @@ const ormConfig = defineConfig({
       return `Migration${timestamp}_${name}`;
     },
   },
+
+  findOneOrFailHandler: (
+    entityName: string,
+    where: Dictionary | IPrimaryKeyValue,
+  ) => {
+    Logger.debug(
+      `Entity ${entityName} not found with where ${JSON.stringify(where)}`,
+    );
+    return new NotFoundException();
+  },
+  findExactlyOneOrFailHandler(
+    entityName: string,
+    where: Dictionary | IPrimaryKeyValue,
+  ) {
+    Logger.debug(
+      `Entity ${entityName} not found with where ${JSON.stringify(where)}`,
+    );
+    return new NotFoundException();
+  },
+
+  logger(message: string) {
+    Logger.debug(message);
+  },
+
+  ignoreUndefinedInQuery: true,
 });
 
 export default ormConfig;

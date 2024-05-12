@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { wrap } from '@mikro-orm/core';
 
+import { RegisterDto } from '@/auth/auth.dtos';
+
 import { UserProfile } from '../common/entities/user-profiles.entity';
 import { User } from '../common/entities/users.entity';
 import { CustomUserProfilesRepository } from '../common/repositories/custom-user-profiles.repository';
@@ -16,7 +18,7 @@ export class UsersRepository {
     this.em = this.userProfileRepository.getEntityManager();
   }
 
-  async create(registerDto) {
+  async create(registerDto: RegisterDto) {
     const { email, password, firstName, lastName, address, phoneNumber } =
       registerDto;
 

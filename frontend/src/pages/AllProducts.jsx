@@ -11,7 +11,9 @@ const AllProducts = () => {
   const [isProductClicked, setIsProductClicked] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(false);
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser"))
+  );
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("currentUser")));
@@ -23,11 +25,22 @@ const AllProducts = () => {
     [`allProducts${userId}`],
     () => fetchAllProducts(userId),
     {
-      staleTime: Infinity,
+      staleTime: 0,
     }
   );
 
-  const products = queryResults.data || [];
+  let products = queryResults.data || [];
+
+  if (products) {
+    const replaceUnderscores = (categories) => {
+      return categories.map((category) => category.replace(/_/g, " "));
+    };
+
+    products = products.map((product) => ({
+      ...product,
+      categories: replaceUnderscores(product.categories),
+    }));
+  }
 
   if (queryResults.isLoading) {
     return <Loading />;

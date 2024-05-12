@@ -1,8 +1,11 @@
 import { ConfigModule } from '@nestjs/config';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
+import { TransactionsModule } from './transactions/transactions.module';
 import ormConfig from './db/db.config';
 
 @Module({
@@ -10,15 +13,17 @@ import ormConfig from './db/db.config';
     MikroOrmModule.forRoot(ormConfig),
 
     ConfigModule.forRoot({
-      // ignoreEnvFile: false,
+      ignoreEnvFile: false,
       isGlobal: true,
-      // validate,
     }),
 
     UsersModule,
     AuthModule,
+    CategoriesModule,
+    ProductsModule,
+    TransactionsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [Logger],
 })
 export class AppModule {}

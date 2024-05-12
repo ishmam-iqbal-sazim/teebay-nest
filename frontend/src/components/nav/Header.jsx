@@ -59,7 +59,7 @@ const Header = ({ user }) => {
         <Grid.Col span={1}>
           <Group position="right" grow spacing={"sm"}>
             <Text color="black" fw={300} fz={"sm"}>
-              Hello, {user.firstName}
+              Hello, {user.userProfile.firstName}
             </Text>
             <Button color="red" uppercase onClick={handleLogoutClick}>
               Logout

@@ -13,6 +13,7 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { GrClose } from "react-icons/gr";
+
 import { formatDate } from "../../helper/formatDate";
 
 const BuyOrRent = ({ product, onClose, userId }) => {
@@ -29,15 +30,15 @@ const BuyOrRent = ({ product, onClose, userId }) => {
   });
 
   const productCategoriesArray = product.categories.map((category) => {
-    return category.name;
+    return category;
   });
 
   let reshapedProduct = {
     title: product.title,
     description: product.description,
-    purchase_price: product.purchase_price,
-    rent_price: product.rent_price,
-    rent_duration: product.rent_duration,
+    purchase_price: product.purchasePrice,
+    rent_price: product.rentPrice,
+    rent_duration: product.rentDuration,
     categories: productCategoriesArray,
   };
 
@@ -51,15 +52,12 @@ const BuyOrRent = ({ product, onClose, userId }) => {
   const handleBuyConfirm = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/v1/buy/${userId}/${product.id}`,
+        `http://localhost:3001/api/v1/users/${userId}/products/${product.id}/transactions/buy`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            productId: product.id,
-          }),
         }
       );
 

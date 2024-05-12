@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  PasswordInput,
-  TextInput,
-  Center,
-  Text,
-  Flex,
-  Grid,
-} from "@mantine/core";
+import { Box, Center, Text, Flex, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -42,6 +33,7 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
 
         localStorage.setItem("currentUser", JSON.stringify(data));
 
